@@ -6,4 +6,5 @@ which has students interested in weight lifting.
 ## Frameworks & Tools
 FrontEnd: ReactJS & JavaScript <br />
 BackEnd: Python <br />
-Database: Oracle SQL Database
+Database: Oracle SQL Database <br />
+Hosting Service: Oracle
