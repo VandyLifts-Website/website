@@ -8,3 +8,6 @@ FrontEnd: ReactJS & JavaScript <br />
 BackEnd: Python <br />
 Database: Oracle SQL Database <br />
 Hosting Service: Oracle
+
+## Trello Board
+https://trello.com/b/BAAWsm68/vandylifts-project-board
