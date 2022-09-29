@@ -9,7 +9,9 @@ function NavigationBar() {
   return (
     <Navbar bg="light" variant="light">
       <Container>
-        <Navbar.Brand href="#home">VandyLifts</Navbar.Brand>
+        <Navbar.Brand href="#home">
+          <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
+        </Navbar.Brand>
         <Form className="d-flex">
           <Button variant="outline-success">Sign In</Button>
           <Button className="ms-2" variant="outline-primary">

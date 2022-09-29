@@ -2,6 +2,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import NavigationBar from "./components/layouts/NavigationBar";
+import Footer from "./components/layouts/Footer";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         </a>
       </header> */}
       <NavigationBar />
+      <Footer />
     </div>
   );
 }
