@@ -37,7 +37,7 @@
   }
 }
 
-.app-body {
+body {
   background-image: url("../public/images/background.jpg");
   background-position: center;
   background-repeat: no-repeat;
