@@ -1,12 +1,28 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Landing from "./components/pages/Landing";
+import NavigationBar from "./components/layouts/NavigationBar";
+import Footer from "./components/layouts/Footer";
 
 function App() {
   return (
-    <div className="app-body">
-      <Landing />
+    <div>
+      {/* <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.js</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header> */}
+      <NavigationBar />
+      <Footer />
     </div>
   );
 }

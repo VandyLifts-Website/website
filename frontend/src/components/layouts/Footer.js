@@ -1,4 +1,3 @@
-/* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
 import Container from "react-bootstrap/Container";
 import {
@@ -15,12 +14,8 @@ function Footer() {
   return (
     <div
       className="text-center text-lg-start text-muted border-top"
-      style={{
-        position: "relative",
-        bottom: 0,
-        width: "100%",
-        backgroundColor: "#F3F3F3",
-      }}
+      backgroundColor="light"
+      style={{ position: "fixed", bottom: 0, width: "100%" }}
     >
       <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <div className="me-5 d-none d-lg-block">
@@ -45,7 +40,7 @@ function Footer() {
         <Container className="text-center text-md-start mt-5">
           <div className="row mt-3">
             <div md="3" lg="4" xl="3" className="col mx-auto mb-4 me-5">
-              <h6 className="text-uppercase fw-bold mb-4">VandyLifts</h6>
+              <h6 className="text-uppercase fw-bold mb-4">Company name</h6>
               <p>
                 Here you can use rows and columns to organize your footer
                 content. Lorem ipsum dolor sit amet, consectetur adipisicing
@@ -80,8 +75,8 @@ function Footer() {
             <div md="4" lg="3" xl="3" className="col mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Contact</h6>
               <p>
-                <HouseFill className="me-3" />
-                Nashville, TN 37235, US
+                <HouseFill className="me-2" />
+                New York, NY 10012, US
               </p>
               <p>
                 <EnvelopeFill className="me-3" />
