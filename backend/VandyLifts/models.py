@@ -3,10 +3,16 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
+class TimeAvailabilty(models.Model):
+    # day = # Enum of day
+    time = models.TimeField
+
+
 class Organization(models.Model):
     title = models.CharField(max_length=120)
     owner = models.ForeignKey(User, related_name='owner_set', on_delete=models.CASCADE)
     members = models.ManyToManyField(User, through='SurveySubmission')
+    time_choices = models.ManyToManyField(TimeAvailabilty)
 
     def names(self):
         return ', '.join(person.username for person in self.members.all())
@@ -17,8 +23,9 @@ class Organization(models.Model):
 
 class SurveySubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_mentor = models.BooleanField()
+    is_mentor = models.BooleanField() # Becomes enum
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    time_availibily = models.ManyToManyField(TimeAvailabilty)
 
 
 class Match(models.Model):
