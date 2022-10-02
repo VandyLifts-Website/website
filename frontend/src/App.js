@@ -1,12 +1,12 @@
-// import logo from "./logo.svg";
+/* Copyright P. Opiyo @2022 - All rights reserved */
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import LandingPage from "./components/pages/LandingPage";
+import Landing from "./components/pages/Landing";
 
 function App() {
   return (
-    <div>
-      <LandingPage />
+    <div className="app-body">
+      <Landing />
     </div>
   );
 }

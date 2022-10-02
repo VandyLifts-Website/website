@@ -1,3 +1,4 @@
+/* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
 import Container from "react-bootstrap/Container";
 import {
@@ -14,8 +15,12 @@ function Footer() {
   return (
     <div
       className="text-center text-lg-start text-muted border-top"
-      backgroundColor="#F3F3F3"
-      style={{ position: "fixed", bottom: 0, width: "100%" }}
+      style={{
+        position: "relative",
+        bottom: 0,
+        width: "100%",
+        backgroundColor: "#F3F3F3",
+      }}
     >
       <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
         <div className="me-5 d-none d-lg-block">
