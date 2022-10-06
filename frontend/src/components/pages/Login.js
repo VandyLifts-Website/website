@@ -4,7 +4,7 @@ import NavBar from "../layouts/NavBar";
 
 function Login() {
   return (
-    <>
+    <div className="login-body">
       <NavBar isRegister={true} isLogin={false} />
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -57,7 +57,7 @@ function Login() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

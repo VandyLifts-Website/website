@@ -2,7 +2,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Body from "../layouts/Body";
-import Footer from "../layouts/Footer";
 import Login from "./Login";
 import Register from "./Register";
 
@@ -15,7 +14,6 @@ function Landing() {
           <Route exact path="/register" element={<Register />} />
           <Route exact path="/login" element={<Login />} />
         </Routes>
-        <Footer />
       </Router>
     </div>
   );
