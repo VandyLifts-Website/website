@@ -19,6 +19,7 @@ from rest_framework import routers
 from VandyLifts import views
 
 router = routers.DefaultRouter()
+router.register(r'time_availability', views.TimeAvailabilityView, 'time_availability')
 router.register(r'organizations', views.OrganizationView, 'organizations')
 router.register(r'survey_submissions', views.SurveySubmissionView, 'survey_submissions')
 router.register(r'matches', views.MatchView, 'matches')
