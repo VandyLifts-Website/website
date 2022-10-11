@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 # Author: David Perez
 # Start Date: 9/27/2022
 
+
 class TimeAvailabilityReadSerializer(serializers.ModelSerializer):
     time = serializers.TimeField(read_only=True)
     day = serializers.CharField(source='get_day_display', read_only=True)

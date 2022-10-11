@@ -53,25 +53,56 @@ class Organization(models.Model):
     def __str__(self):
         return self.title
 
-
+#Editor/Author: Yiu Tran
+#Edit date: 10/7/2022
 class SurveySubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    is_mentor = models.BooleanField()
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     time_availability = models.ManyToManyField(TimeAvailability)
     max_matches = models.PositiveIntegerField()
 
-    def title(self):
-        return 'mentor' if self.is_mentor else 'mentee'
+    is_mentor = models.BooleanField(blank=True)
+    is_mentee = models.BooleanField(blank=True)
+    buddy = models.BooleanField(blank=True)
+    guide_lifter = models.BooleanField(blank=True)
+    newbie_lifter = models.BooleanField(blank=True)
+
+    deadlift = models.BooleanField()
+    squat = models.BooleanField()
+    bench_press = models.BooleanField()
+
+
+    class Gender(models.TextChoices):
+        MALE = 'M', _('Male')
+        FEMALE = 'F', _('Female')
+        NO_PREFERENCE = 'N', _('N/A')
+
+    gender_preference = models.CharField(
+        max_length=1,
+        choices=Gender.choices,
+        default=Gender.NO_PREFERENCE,
+    )
+    def person(self):
+        if self.is_mentor:
+            return 'mentor'
+        elif self.is_mentee:
+            return 'mentee'
+        elif self.buddy:
+            return 'buddy'
+        elif self.guide_lifter:
+            return 'guide lifter'
+        elif self.newbie_lifter:
+            return newbie_lifter
 
     def __str__(self):
-        return f'{self.user} - {self.title()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]'
+        return f'{self.user} - {self.person()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]'
 
-
+#Editor/Author: Yiu Tran
+#Edit date: 10/10/2022
 class Match(models.Model):
     people = models.ManyToManyField(SurveySubmission)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    confirmed = models.BooleanField()
+    confirmed = models.BooleanField(default=False)
 
     def names(self):
         return ', '.join(person.user.username for person in self.people.all())

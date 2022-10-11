@@ -6,6 +6,7 @@ from .models import Organization, SurveySubmission, Match, TimeAvailability
 class TimeAvailabilityAdmin(admin.ModelAdmin):
     list_display = [field.name for field in TimeAvailability._meta.fields]
 
+
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Organization._meta.fields]
 

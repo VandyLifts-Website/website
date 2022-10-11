@@ -13,6 +13,8 @@ from .models import Organization, SurveySubmission, Match, TimeAvailability
 # Start Date: 9/27/2022
 
 # Create your views here.
+
+
 class TimeAvailabilityView(viewsets.ModelViewSet):
     queryset = TimeAvailability.objects.all()
 
@@ -34,7 +36,8 @@ class OrganizationView(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def calculate_automatic_matches(self, request, pk=None):
-        # run "python ./manage.py calculate_automatic_matches <organization_id>"
+        # run "python ./manage.py calculate_automatic_matches
+        # <organization_id>"
         return Response("")
 
 
