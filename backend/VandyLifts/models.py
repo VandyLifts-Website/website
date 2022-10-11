@@ -65,7 +65,7 @@ class SurveySubmission(models.Model):
     is_mentee = models.BooleanField(blank=True)
     buddy = models.BooleanField(blank=True)
     guide_lifter = models.BooleanField(blank=True)
-    newbie_lifter = models.BooleanField(blank=True)
+    learner_lifter = models.BooleanField(blank=True)
 
     deadlift = models.BooleanField()
     squat = models.BooleanField()
@@ -91,8 +91,8 @@ class SurveySubmission(models.Model):
             return 'buddy'
         elif self.guide_lifter:
             return 'guide lifter'
-        elif self.newbie_lifter:
-            return newbie_lifter
+        elif self.learner_lifter:
+            return 'learner_lifter'
 
     def __str__(self):
         return f'{self.user} - {self.person()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]'
