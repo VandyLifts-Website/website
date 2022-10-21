@@ -1,20 +1,26 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Body from "../layouts/Body";
-import Login from "./Login";
-import Register from "./Register";
+import NavBar from "../layouts/NavBar";
+import Footer from "../layouts/Footer";
 
 function Landing() {
   return (
     <div>
-      <Router>
-        <Routes>
-          <Route exact path="/" element={<Body />} />
-          <Route exact path="/register" element={<Register />} />
-          <Route exact path="/login" element={<Login />} />
-        </Routes>
-      </Router>
+      <NavBar isLogin={true} isRegister={true} />
+      <div className="intro-body">
+        <div className="intro">
+          <div className="banner">
+            Look Fit.
+            <br />
+            Feel Fit.
+          </div>
+          <p className="body-paragraph">
+            Pair up with another Vanderbilt Student to keep yourself accountable
+            and maximize workout experience
+          </p>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 }
