@@ -11,16 +11,17 @@ from django.utils.translation import gettext_lazy as _
 # Edit date: 10/21/2022
 # Create your models here.
 class TimeAvailability(models.Model):
-    class Day(models.IntegerChoices):
-        MONDAY = 1, _('Monday')
-        TUESDAY = 2, _('Tuesday')
-        WEDNESDAY = 3, _('Wednesday')
-        THURSDAY = 4, _('Thursday')
-        FRIDAY = 5, _('Friday')
-        SATUDAY = 6, _('Saturday')
-        SUNDAY = 7, _('Sunday')
-    day = models.IntegerChoices(
-        choices=Day.choices,
+    class DayOfTheWeek(models.IntegerChoices):
+        MONDAY = '1', _('Monday')
+        TUESDAY = '2', _('Tuesday')
+        WEDNESDAY = '3', _('Wednesday')
+        THURSDAY = '4', _('Thursday')
+        FRIDAY = '5', _('Friday')
+        SATUDAY = '6', _('Saturday')
+        SUNDAY = '7', _('Sunday')
+    day = models.CharField(
+        max_length=1,
+        choices=DayOfTheWeek.choices,
     )
     time = models.TimeField()
 
@@ -49,24 +50,23 @@ class Organization(models.Model):
 
 # Editor/Author: Yiu Tran
 # Edit date: 10/7/2022
-
-
+# Edit date: 10/21/2022
 class SurveySubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     time_availability = models.ManyToManyField(TimeAvailability)
     max_matches = models.PositiveIntegerField()
-
     name = models.CharField(max_length=50)
 
-    class Categorization_of_person(models.IntegerChoices):
-        MENTOR = 1, _('Mentor')
-        MENTEE = 2, _('Mentee')
-        BUDDY = 3, _('Buddy')
-        GUIDE_LIFTER = 4, _('Guide Lifter')
-        LEARNER_LIFER = 5, _('Learner Lifter')
+    class Categorization_of_person(models.TextChoices):
+        MENTOR = '1', _('Mentor')
+        MENTEE = '2', _('Mentee')
+        BUDDY = '3', _('Buddy')
+        GUIDE_LIFTER = '4', _('Guide Lifter')
+        LEARNER_LIFER = '5', _('Learner Lifter')
 
-    type_of_person = models.IntegerChoices(
+    type_of_person = models.CharField(
+        max_length=1,
         choices=Categorization_of_person.choices,
     )
 
@@ -84,13 +84,13 @@ class SurveySubmission(models.Model):
         choices=Gender.choices,
     )
 
-    class GenderPreference(models.IntegerChoices):
-        SAME_GENDER = 1, _('Same')
-        ALL = 2, _('All')
+    class GenderPreference(models.TextChoices):
+        SAME_GENDER = '1', _('Same')
+        ALL = '2', _('All')
 
-    gender_preference = models.IntegerChoices(
+    gender_preference = models.CharField(
+        max_length=1,
         choices=GenderPreference.choices,
-        default=GenderPreference.ALL,
     )
 
     def __str__(self):
@@ -98,8 +98,6 @@ class SurveySubmission(models.Model):
 
 # Editor/Author: Yiu Tran
 # Edit date: 10/10/2022
-
-
 class Match(models.Model):
     people = models.ManyToManyField(SurveySubmission)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
