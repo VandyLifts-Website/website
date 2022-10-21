@@ -7,34 +7,28 @@ from django.utils.translation import gettext_lazy as _
 # Start Date: 9/27/2022
 
 
-DAY_OF_THE_WEEK = {
-    '1': _('Monday'),
-    '2': _('Tuesday'),
-    '3': _('Wednesday'),
-    '4': _('Thursday'),
-    '5': _('Friday'),
-    '6': _('Saturday'),
-    '7': _('Sunday'),
-}
-
-
-class DayOfTheWeekField(models.CharField):
-    def __init__(self, *args, **kwargs):
-        kwargs['choices'] = tuple(sorted(DAY_OF_THE_WEEK.items()))
-        kwargs['max_length'] = 1
-        super(DayOfTheWeekField, self).__init__(*args, **kwargs)
-
-
+# Editor/Author: Yiu Tran
+# Edit date: 10/21/2022
 # Create your models here.
 class TimeAvailability(models.Model):
-    day = DayOfTheWeekField()
+    class Day(models.IntegerChoices):
+        MONDAY = 1, _('Monday')
+        TUESDAY = 2, _('Tuesday')
+        WEDNESDAY = 3, _('Wednesday')
+        THURSDAY = 4, _('Thursday')
+        FRIDAY = 5, _('Friday')
+        SATUDAY = 6, _('Saturday')
+        SUNDAY = 7, _('Sunday')
+    day = models.IntegerChoices(
+        choices=Day.choices,
+    )
     time = models.TimeField()
 
     class Meta:
         unique_together = ('day', 'time',)
 
     def __str__(self):
-        return f'{self.get_day_display()} {self.time.strftime("%I:%M %p")}' # type: ignore
+        return f'{self.day()} {self.time.strftime("%I:%M %p")}'  # type: ignore
 
 
 class Organization(models.Model):
@@ -53,52 +47,59 @@ class Organization(models.Model):
     def __str__(self):
         return self.title
 
-#Editor/Author: Yiu Tran
-#Edit date: 10/7/2022
+# Editor/Author: Yiu Tran
+# Edit date: 10/7/2022
+
+
 class SurveySubmission(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     time_availability = models.ManyToManyField(TimeAvailability)
     max_matches = models.PositiveIntegerField()
 
-    is_mentor = models.BooleanField(blank=True)
-    is_mentee = models.BooleanField(blank=True)
-    buddy = models.BooleanField(blank=True)
-    guide_lifter = models.BooleanField(blank=True)
-    learner_lifter = models.BooleanField(blank=True)
+    name = models.CharField(max_length=50)
 
-    deadlift = models.BooleanField()
-    squat = models.BooleanField()
-    bench_press = models.BooleanField()
+    class Categorization_of_person(models.IntegerChoices):
+        MENTOR = 1, _('Mentor')
+        MENTEE = 2, _('Mentee')
+        BUDDY = 3, _('Buddy')
+        GUIDE_LIFTER = 4, _('Guide Lifter')
+        LEARNER_LIFER = 5, _('Learner Lifter')
 
+    type_of_person = models.IntegerChoices(
+        choices=Categorization_of_person.choices,
+    )
+
+    power_lifting = models.BooleanField(default=False)
+    body_building = models.BooleanField(default=False)
+    olympic_lifting = models.BooleanField(default=False)
 
     class Gender(models.TextChoices):
         MALE = 'M', _('Male')
         FEMALE = 'F', _('Female')
-        NO_PREFERENCE = 'N', _('N/A')
+        NON_BINARY = 'B', _('Non Binary')
 
-    gender_preference = models.CharField(
+    gender = models.CharField(
         max_length=1,
         choices=Gender.choices,
-        default=Gender.NO_PREFERENCE,
     )
-    def person(self):
-        if self.is_mentor:
-            return 'mentor'
-        elif self.is_mentee:
-            return 'mentee'
-        elif self.buddy:
-            return 'buddy'
-        elif self.guide_lifter:
-            return 'guide lifter'
-        elif self.learner_lifter:
-            return 'learner_lifter'
+
+    class GenderPreference(models.IntegerChoices):
+        SAME_GENDER = 1, _('Same')
+        ALL = 2, _('All')
+
+    gender_preference = models.IntegerChoices(
+        choices=GenderPreference.choices,
+        default=GenderPreference.ALL,
+    )
 
     def __str__(self):
-        return f'{self.user} - {self.person()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]'
+        return f'{self.user} - {self.type_of_person()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]'
 
-#Editor/Author: Yiu Tran
-#Edit date: 10/10/2022
+# Editor/Author: Yiu Tran
+# Edit date: 10/10/2022
+
+
 class Match(models.Model):
     people = models.ManyToManyField(SurveySubmission)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
