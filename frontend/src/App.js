@@ -6,6 +6,7 @@ import Profile from "./components/pages/Profile";
 import Login from "./components/pages/Login";
 import Register from "./components/pages/Register";
 import Landing from "./components/pages/Landing";
+import Survey from "./components/pages/Survey"
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/profile" element={<Profile />} />
         <Route exact path="/register" element={<Register />} />
         <Route exact path="/login" element={<Login />} />
+        <Route exact path="/survey" element={<Survey />} />
       </Routes>
     </Router>
   );
