@@ -36,3 +36,57 @@
     transform: rotate(360deg);
   }
 }
+
+.app-body {
+  /* background-image: url("../public/images/background.jpg"); */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.intro-body {
+  display: block;
+  background-image: linear-gradient(
+      180deg,
+      rgba(10, 39, 51, 0.8),
+      rgba(10, 39, 51, 0.8)
+    ),
+    url("../public/images/vandy_rec.jpg");
+  background-size: cover;
+  justify-content: center;
+  padding-top: 150px;
+  padding-bottom: 150px;
+}
+
+.banner {
+  margin-bottom: 30px;
+  transition: transform 250ms;
+  transform-style: preserve-3d;
+  text-align: center;
+  font-family: Inter, sans-serif;
+  color: #ffff;
+  font-weight: 600;
+  font-size: 6vw;
+}
+
+.banner:hover {
+  transform: translateY(-10px);
+}
+
+.body-paragraph {
+  color: #ffff;
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.5vw;
+}
+
+.profile {
+  background-image: linear-gradient(
+      180deg,
+      rgba(10, 39, 51, 0.8),
+      rgba(10, 39, 51, 0.8)
+    ),
+    url("../public/images/vandy_rec.jpg");
+  background-size: cover;
+}
