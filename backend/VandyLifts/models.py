@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 # Edit date: 10/21/2022
 # Create your models here.
 class TimeAvailability(models.Model):
-    class DayOfTheWeek(models.IntegerChoices):
+    class DayOfTheWeek(models.TextChoices):
         MONDAY = '1', _('Monday')
         TUESDAY = '2', _('Tuesday')
         WEDNESDAY = '3', _('Wednesday')
@@ -29,7 +29,7 @@ class TimeAvailability(models.Model):
         unique_together = ('day', 'time',)
 
     def __str__(self):
-        return f'{self.day()} {self.time.strftime("%I:%M %p")}'  # type: ignore
+        return f'{self.get_day_display()} {self.time.strftime("%I:%M %p")}'  # type: ignore
 
 
 class Organization(models.Model):
@@ -94,7 +94,7 @@ class SurveySubmission(models.Model):
     )
 
     def __str__(self):
-        return f'{self.user} - {self.type_of_person()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]'
+        return f'{self.user} - {self.get_type_of_person_display()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]' # type: ignore
 
 # Editor/Author: Yiu Tran
 # Edit date: 10/10/2022
