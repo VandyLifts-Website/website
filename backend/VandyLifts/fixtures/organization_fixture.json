@@ -1,0 +1,24 @@
+[
+  {
+    "model": "auth.User",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$390000$i4e9YNVfbvjWXWVKsHptoU$tx0lGHV82YNZJ1PskJlyDuskV3K/Voupd7oQ0+EdAm8=",
+      "is_superuser": true,
+      "username": "TestFixtureUser",
+      "email": "david.a.perez@vanderbilt.edu",
+      "is_staff": true
+    }
+  },
+  {
+    "model": "VandyLifts.Organization",
+    "pk": 1,
+    "fields": {
+      "title": "TestFixtureOrganization",
+      "owner_id": 1,
+      "max_time_matches": 3,
+      "num_time_matches_weight": 1,
+      "num_matches_weight": 10
+    }
+  }
+]
