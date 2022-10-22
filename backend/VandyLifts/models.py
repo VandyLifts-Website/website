@@ -42,6 +42,16 @@ class Organization(models.Model):
     num_time_matches_weight = models.PositiveIntegerField()
     num_matches_weight = models.PositiveIntegerField()
 
+    class OrganizationType(models.TextChoices):
+        MENTOR_MENTEE = '1', _('Mentor/Mentee')
+        BUDDY = '2', _('Buddy')
+        DAY_IN_THE_LIFE = '3', _('Day In The Life')
+
+    type_of_organization = models.CharField(
+        max_length=1,
+        choices=OrganizationType.choices,
+    )
+
     def names(self):
         return ', '.join(person.username for person in self.members.all())
 
@@ -58,7 +68,7 @@ class SurveySubmission(models.Model):
     max_matches = models.PositiveIntegerField()
     name = models.CharField(max_length=50)
 
-    class Categorization_of_person(models.TextChoices):
+    class PersonType(models.TextChoices):
         MENTOR = '1', _('Mentor')
         MENTEE = '2', _('Mentee')
         BUDDY = '3', _('Buddy')
@@ -67,7 +77,7 @@ class SurveySubmission(models.Model):
 
     type_of_person = models.CharField(
         max_length=1,
-        choices=Categorization_of_person.choices,
+        choices=PersonType.choices,
     )
 
     power_lifting = models.BooleanField(default=False)
@@ -77,7 +87,7 @@ class SurveySubmission(models.Model):
     class Gender(models.TextChoices):
         MALE = 'M', _('Male')
         FEMALE = 'F', _('Female')
-        NON_BINARY = 'B', _('Non Binary')
+        NON_BINARY = 'N', _('Non Binary')
 
     gender = models.CharField(
         max_length=1,
@@ -93,6 +103,9 @@ class SurveySubmission(models.Model):
         choices=GenderPreference.choices,
     )
 
+    class Meta:
+        unique_together = ('user', 'organization', 'type_of_person')
+
     def __str__(self):
         return f'{self.user} - {self.get_type_of_person_display()} - {self.organization} - [{", ".join([str(time) for time in self.time_availability.all()])}]' # type: ignore
 
@@ -102,6 +115,7 @@ class Match(models.Model):
     people = models.ManyToManyField(SurveySubmission)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     confirmed = models.BooleanField(default=False)
+    times_matched = models.ManyToManyField(TimeAvailability)
 
     def names(self):
         return ', '.join(person.user.username for person in self.people.all())
@@ -110,4 +124,4 @@ class Match(models.Model):
         return "confirmed" if self.confirmed else "not confirmed"
 
     def __str__(self):
-        return f'[{self.names()}] - {self.organization} - {self.status()}'
+        return f'[{self.names()}] - {self.organization} - {self.status()} [{", ".join([str(time) for time in self.times_matched.all()])}'

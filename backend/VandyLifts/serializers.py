@@ -1,3 +1,4 @@
+from numpy import source
 from rest_framework import serializers
 from .models import Organization, SurveySubmission, Match, TimeAvailability
 from django.contrib.auth.models import User
@@ -44,6 +45,9 @@ class OrganizationReadSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     time_availability = TimeAvailabilityReadSerializer(
         many=True, read_only=True)
+    type_of_organization = serializers.CharField(source='get_type_of_organization_display', read_only=True)
+    gender = serializers.CharField(source='get_gender_display', read_only=True)
+    gender_preference = serializers.CharField(source='get_gender_preference_display', read_only=True)
 
     class Meta:
         model = Organization
@@ -61,6 +65,7 @@ class SurveySubmissionReadSerializer(serializers.ModelSerializer):
     organization = OrganizationMinimalSerializer(read_only=True)
     time_availability = TimeAvailabilityReadSerializer(
         many=True, read_only=True)
+    type_of_person = serializers.CharField(source='get_type_of_person_display', read_only=True)
 
     class Meta:
         model = SurveySubmission
@@ -75,6 +80,7 @@ class MatchSerializer(serializers.ModelSerializer):
 
 class MatchReadSerializer(serializers.ModelSerializer):
     people = SurveySubmissionReadSerializer(many=True, read_only=True)
+    times_matched = TimeAvailabilityReadSerializer(many=True, read_only=True)
 
     class Meta:
         model = Match

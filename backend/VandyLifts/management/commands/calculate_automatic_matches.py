@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from VandyLifts.models import Organization, Match
+from VandyLifts.models import Organization, Match, SurveySubmission
 from VandyLifts.automatic_matcher_ortools import solve_automatic_matches
 
 # Author: David Perez
@@ -16,10 +16,10 @@ class Command(BaseCommand):
         organization = Organization.objects.get(pk=options['organization_id'])
 
         # Get mentor's in organization
-        mentors = organization.surveysubmission_set.filter(is_mentor=True).all()  # type: ignore
+        mentors = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTOR).all()  # type: ignore
 
         # Get mentee's in organization
-        mentees = organization.surveysubmission_set.filter(is_mentor=False).all()  # type: ignore
+        mentees = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTEE).all()  # type: ignore
 
         # Get times of the organization
         times = organization.time_choices.all()
@@ -33,5 +33,6 @@ class Command(BaseCommand):
             match = Match(organization=organization, confirmed=False)
             match.save()
             match.people.add(mentor, mentee)
+            match.times_matched.add(*time_matches)
 
         self.stdout.write(self.style.SUCCESS('Added all matches'))

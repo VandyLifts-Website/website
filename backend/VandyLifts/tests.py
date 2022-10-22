@@ -14,20 +14,23 @@ from django.test import TestCase
 from VandyLifts.automatic_matcher_ortools import solve_automatic_matches
 from VandyLifts.models import TimeAvailability, User, Organization, SurveySubmission
 
-def handle_user(name, email, password, org, times, is_mentor, preferences, num_matches, gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday):
+
+def handle_user(name, email, password, org, times, person_type, preferences, num_matches, gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday):
     # Create user if the user does not already exist
     try:
         with transaction.atomic():
-            user = User.objects.create_user(name.replace(' ', '_'), email=email, password=password)
+            user = User.objects.create_user(name.replace(
+                ' ', '_'), email=email, password=password)
     except IntegrityError:
         print(f"{name} has already registered as a user")
         with transaction.atomic():
             user = User.objects.get(username=name.replace(' ', '_'))
-    
+
     # Submit a survey
     try:
         with transaction.atomic():
-            ss = SurveySubmission.objects.create(user=user, is_mentor=is_mentor, organization=org, max_matches=3)
+            ss = SurveySubmission.objects.create(user=user, organization=org, max_matches=3,  name="TEST", type_of_person=person_type,
+                                                 gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
     except IntegrityError:
         print(f"{name} has already submitted a mentor form")
         return
@@ -70,7 +73,6 @@ def handle_user(name, email, password, org, times, is_mentor, preferences, num_m
                 print("Availability not recognized", availability)
                 continue
             ss.time_availability.add(*times.filter(day=day, time=time))
-                
 
     # print("email:", email)  # check
     # print("name:", name)  # check
@@ -86,7 +88,8 @@ def handle_user(name, email, password, org, times, is_mentor, preferences, num_m
     # print("sunday:", sunday)
     # print("gender:", gender)
 
-@override_settings(PASSWORD_HASHERS = ['django.contrib.auth.hashers.MD5PasswordHasher'])
+
+@override_settings(PASSWORD_HASHERS=['django.contrib.auth.hashers.MD5PasswordHasher'])
 class MyTests(TestCase):
     @classmethod
     def setUpTestData(cls):
@@ -113,9 +116,9 @@ class MyTests(TestCase):
 
         # Sumbit a survey for both users
         ss1 = SurveySubmission.objects.create(
-            user=user1, is_mentor=True, organization=self.org, max_matches=1)
+            user=user1, organization=self.org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.MENTOR, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
         ss2 = SurveySubmission.objects.create(
-            user=user2, is_mentor=False, organization=self.org, max_matches=1)
+            user=user2, organization=self.org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.MENTEE, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
 
         # Give both users the same time availability
         ss1.time_availability.set(self.times.filter(
@@ -123,24 +126,28 @@ class MyTests(TestCase):
         ss2.time_availability.set(self.times.filter(
             day='1', time=datetime.time(hour=15)))
 
-        mentors = self.org.surveysubmission_set.filter(is_mentor=True).all()  # type: ignore
-        mentees = self.org.surveysubmission_set.filter(is_mentor=False).all()  # type: ignore
+        mentors = self.org.surveysubmission_set.filter( # type: ignore
+            type_of_person=SurveySubmission.PersonType.MENTOR).all()
+        mentees = self.org.surveysubmission_set.filter( # type: ignore
+            type_of_person=SurveySubmission.PersonType.MENTEE).all()
         times = self.org.time_choices.all()
 
-        assert len(solve_automatic_matches(self.org, mentors, mentees, times)) == 1
+        assert len(solve_automatic_matches(
+            self.org, mentors, mentees, times)) == 1
 
     def test2(self):
-        #with cProfile.Profile() as pr:
+        # with cProfile.Profile() as pr:
         if True:
             mentors_filename = 'mentors.csv'
 
             with open(mentors_filename, 'r') as csvfile:
                 datareader = csv.reader(csvfile)
-                
+
                 next(datareader)
 
                 for _, email, name, _, _, _, preferences, num_mentees, _, _, gender_preference, _, _, _, _, monday, tuesday, wednesday, thursday, friday, saturday, sunday, _, _, _, _, _, _, _, gender in datareader:
-                    handle_user(name, email, self.password, self.org, self.times, True, preferences, num_mentees, gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+                    handle_user(name, email, self.password, self.org, self.times, SurveySubmission.PersonType.MENTOR, preferences, num_mentees,
+                                gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
 
             mentees_filename = 'mentees.csv'
 
@@ -150,11 +157,13 @@ class MyTests(TestCase):
                 next(datareader)
 
                 for _, name, email, _, preferences, _, num_mentors, _, gender_preference, _, _, _, _, monday, tuesday, wednesday, thursday, friday, saturday, sunday, _, _, _, _, _, _, _, _, gender, _, _ in datareader:
-                    handle_user(name, email, self.password, self.org, self.times, False, preferences, num_mentors, gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+                    handle_user(name, email, self.password, self.org, self.times, SurveySubmission.PersonType.MENTEE, preferences, num_mentors,
+                                gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
 
-
-            mentors = self.org.surveysubmission_set.filter(is_mentor=True).all()  # type: ignore
-            mentees = self.org.surveysubmission_set.filter(is_mentor=False).all()  # type: ignore
+            mentors = self.org.surveysubmission_set.filter( # type: ignore
+                type_of_person=SurveySubmission.PersonType.MENTOR).all()
+            mentees = self.org.surveysubmission_set.filter( # type: ignore
+                type_of_person=SurveySubmission.PersonType.MENTEE).all()  
             times = self.org.time_choices.all()
             solve_automatic_matches(self.org, mentors, mentees, times)
         # sortby = SortKey.CUMULATIVE
