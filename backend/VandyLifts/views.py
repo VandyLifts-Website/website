@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -16,6 +15,7 @@ from .models import Organization, SurveySubmission, Match, TimeAvailability
 
 class TimeAvailabilityView(viewsets.ModelViewSet):
     queryset = TimeAvailability.objects.all()
+    filterset_fields = ['day', 'time']
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -42,6 +42,7 @@ class OrganizationView(viewsets.ModelViewSet):
 
 class SurveySubmissionView(viewsets.ModelViewSet):
     queryset = SurveySubmission.objects.all()
+    filterset_fields = ['organization', 'type_of_person']
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -53,6 +54,7 @@ class SurveySubmissionView(viewsets.ModelViewSet):
 
 class MatchView(viewsets.ModelViewSet):
     queryset = Match.objects.all()
+    filterset_fields = ['organization', 'confirmed']
 
     def get_serializer_class(self):
         if self.action == 'list':

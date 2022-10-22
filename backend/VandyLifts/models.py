@@ -124,4 +124,4 @@ class Match(models.Model):
         return "confirmed" if self.confirmed else "not confirmed"
 
     def __str__(self):
-        return f'[{self.names()}] - {self.organization} - {self.status()} [{", ".join([str(time) for time in self.times_matched.all()])}'
+        return f'[{self.names()}] - {self.organization} - {self.status()} [{", ".join([str(time) for time in self.times_matched.all()])}]'

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'VandyLifts.apps.VandyliftsConfig',
     'corsheaders',
     'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
