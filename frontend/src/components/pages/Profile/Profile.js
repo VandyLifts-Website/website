@@ -32,20 +32,19 @@ function getCookie(name) {
   return cookieValue;
 }
 
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
 function Form2() {
   function handleSubmit(e) {
     e.preventDefault();
-    const csrftoken = getCookie('csrftoken');
     const postData = async () => {
-      const response = await axios.post('/api/time_availability/', {
-        csrfmiddlewaretoken: "abc",
+      const response = await axios.post('http://example.com/api/time_availability/', {
         day: '1',
         time: '01:01:00'
       },  {
         headers: {
-          // Overwrite Axios's automatically set Content-Type
           'Content-Type': 'application/json',
-          'X-CSRFToken': csrftoken
         }
       });
       console.log(response)
@@ -66,7 +65,7 @@ function Profile() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios("http://localhost:8000/api/matches/");
+      const response = await axios("/api/matches/");
       console.log(response);
 
       if (response.status !== 200) {
