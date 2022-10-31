@@ -16,6 +16,51 @@ import Accordion from "react-bootstrap/Accordion";
 //   }
 // };
 
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+          }
+      }
+  }
+  return cookieValue;
+}
+
+function Form2() {
+  function handleSubmit(e) {
+    e.preventDefault();
+    const csrftoken = getCookie('csrftoken');
+    const postData = async () => {
+      const response = await axios.post('/api/time_availability/', {
+        csrfmiddlewaretoken: "abc",
+        day: '1',
+        time: '01:01:00'
+      },  {
+        headers: {
+          // Overwrite Axios's automatically set Content-Type
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        }
+      });
+      console.log(response)
+    }
+    postData().catch(err => {
+      console.log(err);
+    })  }
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Button type="submit">Submit</Button>
+    </form>
+  );
+}
+
 function Profile() {
   const [data, setData] = useState({});
 
@@ -90,6 +135,7 @@ function Profile() {
                   </div>
                   <div className="ms-3" style={{ marginTop: "130px" }}>
                     <h5>John Doe</h5>
+                    <Form2 />
                     <p>john.doe@vanderbilt.edu</p>
                   </div>
                 </div>
