@@ -1,15 +1,7 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
 import Container from "react-bootstrap/Container";
-import {
-  Facebook,
-  Instagram,
-  Twitter,
-  Linkedin,
-  HouseFill,
-  EnvelopeFill,
-  TelephoneFill,
-} from "react-bootstrap-icons";
+import { HouseFill, EnvelopeFill, TelephoneFill } from "react-bootstrap-icons";
 
 function Footer() {
   return (
@@ -22,25 +14,6 @@ function Footer() {
         backgroundColor: "#F3F3F3",
       }}
     >
-      <section className="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
-        <div className="me-5 d-none d-lg-block">
-          <span>Get connected with us on social networks:</span>
-        </div>
-        <div>
-          <a href="#!" className="me-4 text-reset">
-            <Facebook />
-          </a>
-          <a href="#!" className="me-4 text-reset">
-            <Twitter />
-          </a>
-          <a href="#!" className="me-4 text-reset">
-            <Instagram />
-          </a>
-          <a href="#!" className="me-4 text-reset">
-            <Linkedin />
-          </a>
-        </div>
-      </section>
       <section>
         <Container className="text-center text-md-start mt-5">
           <div className="row mt-3">
@@ -56,23 +29,27 @@ function Footer() {
             <div md="3" lg="2" xl="2" className="col mx-auto mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Useful links</h6>
               <p>
-                <a href="#!" className="text-reset">
-                  Pricing
+                <a
+                  href="https://anchorlink.vanderbilt.edu/organization/vandylifts"
+                  className="text-reset"
+                >
+                  AnchorLink
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
-                  Settings
+                <a
+                  href="https://instagram.com/vandylifts_"
+                  className="text-reset"
+                >
+                  Instagram
                 </a>
               </p>
               <p>
-                <a href="#!" className="text-reset">
-                  Orders
-                </a>
-              </p>
-              <p>
-                <a href="#!" className="text-reset">
-                  Help
+                <a
+                  href="https://groupme.com/join_group/86843176/zdmNe7F1"
+                  className="text-reset"
+                >
+                  GroupMe
                 </a>
               </p>
             </div>
@@ -85,10 +62,10 @@ function Footer() {
               </p>
               <p>
                 <EnvelopeFill className="me-3" />
-                info@example.com
+                melanie.k.leguizamon@vanderbilt.edu
               </p>
               <p>
-                <TelephoneFill className="me-3" /> + 01 234 567 88
+                <TelephoneFill className="me-3" />+ 1 630-209-4588
               </p>
             </div>
           </div>
@@ -98,10 +75,7 @@ function Footer() {
         className="text-center p-4"
         style={{ backgroundColor: "rgba(0, 0, 0, 0.05)" }}
       >
-        © 2022 Copyright:
-        <a className="text-reset fw-bold" href="https://mdbootstrap.com/">
-          VandyLifts.com
-        </a>
+        Copyright © 2022 VandyLifts. All Rights Reserved.
       </div>
     </div>
   );

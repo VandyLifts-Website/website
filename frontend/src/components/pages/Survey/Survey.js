@@ -1,31 +1,22 @@
-/* Copyright P. Opiyo @2022 - All rights reserved */
+//Joshua Payne
 import React from "react";
-import NavBar from "../layouts/NavBar";
+import NavBar from "../../layouts/NavBar/NavBar";
 
-function Register() {
+function Survey() {
   return (
     <>
-      <NavBar isRegister={false} isLogin={true} />
+      <NavBar isRegister={false} isLogin={false} />
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12 col-lg-6 col-xl-5">
             <form
               className="card shadow-2-strong"
               style={{ borderRadius: "1rem" }}
-              action="/register"
+              action="/survey"
               method="post"
             >
               <div className="card-body p-5 text-center">
-                <h3 className="mb-5">Sign Up</h3>
-                <div className="form-outline mb-4">
-                  <input
-                    type="text"
-                    className="form-control"
-                    name="username"
-                    id="username"
-                    placeholder="Username"
-                  />
-                </div>
+                <h3 className="mb-5">Mentor Survey</h3>
                 <div className="form-outline mb-4">
                   <input
                     type="text"
@@ -55,29 +46,28 @@ function Register() {
                 </div>
                 <div className="form-outline mb-4">
                   <input
-                    type="password"
+                    type="text"
                     className="form-control"
-                    name="password"
-                    id="password"
-                    placeholder="Password"
+                    name="lift_style"
+                    id="lift_style"
+                    placeholder="Lifting Style (Olympic, General, Power)"
                   />
                 </div>
-                <div className="form-check d-flex justify-content-start mb-4">
+                <div className="form-outline mb-4">
                   <input
-                    className="form-check-input"
-                    type="checkbox"
-                    uncheked="true"
+                    type="text"
+                    className="form-control"
+                    name="sex"
+                    id="sex"
+                    placeholder="Sex(Male, Female)"
                   />
-                  <label className="form-check-label ms-2">
-                    Remember Password
-                  </label>
                 </div>
                 <button
                   className="btn btn-outline-primary btn-block"
                   id="submitBtn"
                   type="submit"
                 >
-                  Register
+                  Submit
                 </button>
               </div>
             </form>
@@ -87,5 +77,4 @@ function Register() {
     </>
   );
 }
-
-export default Register;
+export default Survey;
