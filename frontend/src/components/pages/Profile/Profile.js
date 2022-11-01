@@ -7,6 +7,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/esm/Container";
 import Accordion from "react-bootstrap/Accordion";
+import NavDropdown from "react-bootstrap/NavDropdown";
 
 // const LiftingStyle = (olympic, power_lifting) => {
 //   if (olympic) {
@@ -63,17 +64,29 @@ function Profile() {
             className="me-auto"
             style={{ fontWeight: "bold", color: "purple" }}
           >
-            <Nav.Link href="#home">My Orgs</Nav.Link>
-            <Nav.Link href="#features">Join an Org</Nav.Link>
-            <Nav.Link href="#pricing">Learn Lifting</Nav.Link>
-            <Nav.Link href="#pricing">Club Information</Nav.Link>
+            <Nav.Link href="/profile">Profile</Nav.Link>
+            <NavDropdown title="Fill a Survey" id="basic-nav-dropdown">
+              <NavDropdown.Item href="/survey/mentor">
+                Mentor Survey
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/survey/mentee">
+                Mentee Survey
+              </NavDropdown.Item>
+              <NavDropdown.Item href="/survey/buddy">
+                Buddy Survey
+              </NavDropdown.Item>
+            </NavDropdown>
+            <Nav.Link href="/about">Club Information</Nav.Link>
           </Nav>
           <Form className="d-flex">
-            <Button variant="outline-warning">Sign Out</Button>
+            <Button href="/signin" variant="outline-warning">
+              Sign Out
+            </Button>
           </Form>
         </Container>
       </Navbar>
-      <section className="profile h-100 gradient-custom-2">
+
+      <section className="h-100 gradient-custom-2">
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col col-sm-9 col-xl-7">
@@ -86,7 +99,7 @@ function Profile() {
                     className="ms-4 mt-5 d-flex flex-column"
                     style={{ width: "150px" }}
                   >
-                    <img src="/images/profile_pic.jfif" alt="My profile" />
+                    <img src="/images/profile.jpg" alt="My profile" />
                   </div>
                   <div className="ms-3" style={{ marginTop: "130px" }}>
                     <h5>John Doe</h5>

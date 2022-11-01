@@ -20,7 +20,10 @@ function Landing() {
         </div>
       </div>
       <section>
-        <div className="container" style={{ marginTop: "80px" }}>
+        <div
+          className="container"
+          style={{ marginTop: "80px", backgroundImage: "none" }}
+        >
           <div className="row about-extra">
             <div className="col-lg-6 wow fadeInUp">
               <img
@@ -83,7 +86,7 @@ function Landing() {
           </div>
         </div>
       </section>
-      <Footer />
+      <Footer position={"relative"} />
     </div>
   );
 }

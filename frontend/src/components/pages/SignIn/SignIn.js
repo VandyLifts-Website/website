@@ -1,8 +1,15 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import NavBar from "../../layouts/NavBar/NavBar";
 
 function SignIn() {
+  const navigate = useNavigate();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    navigate("/profile");
+  };
+
   return (
     <div>
       <NavBar isRegister={true} isLogin={false} />
@@ -12,8 +19,7 @@ function SignIn() {
             <form
               className="card shadow-2-strong"
               style={{ borderRadius: "1rem" }}
-              action="/login"
-              method="post"
+              onSubmit={handleSubmit}
             >
               <div className="card-body p-5 text-center">
                 <h3 className="mb-5">Sign In</h3>

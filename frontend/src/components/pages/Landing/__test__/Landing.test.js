@@ -8,10 +8,11 @@ test("Renders landing page", () => {
       <Landing />
     </Router>
   );
+  // Check if the banner is rendered
+  expect(screen.getByText(/Look Fit. Feel Fit./i)).toBeInTheDocument();
 
-  //   expect(screen.getByRole("Link")).toHaveDisplayValue("Sign In");
-  //   const array = screen.getAllByRole("img");
-  screen
-    .getAllByRole("img")
-    .foreach((element) => expect(element.toBeInTheDocument()));
+  const images = screen.getAllByRole("img");
+  console.log(images);
+
+  images.foreach((element) => expect(element.toBeInTheDocument()));
 });

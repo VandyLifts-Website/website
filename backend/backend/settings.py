@@ -127,6 +127,10 @@ CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8000/',
+]
+
 # LOGGING = {
 #     'version': 1,
 #     'filters': {

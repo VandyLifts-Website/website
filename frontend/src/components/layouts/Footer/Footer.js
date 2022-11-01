@@ -3,12 +3,12 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import { HouseFill, EnvelopeFill, TelephoneFill } from "react-bootstrap-icons";
 
-function Footer() {
+function Footer(props) {
   return (
     <div
       className="text-center text-lg-start text-muted border-top"
       style={{
-        position: "relative",
+        position: `${props.position}`,
         bottom: 0,
         width: "100%",
         backgroundColor: "#F3F3F3",
