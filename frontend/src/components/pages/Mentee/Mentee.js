@@ -9,33 +9,30 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Table from "react-bootstrap/Table";
 
 function Mentee() {
-  // const [state, setState] = useState([[false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false],
-  //   [false, false, false, false, false, false, false]]);
+  const [state, setState] = useState([
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+    [false, false, false, false, false, false, false],
+  ]);
 
-  const [isActive, setIsActive] = useState(false);
-
-  const handleClick = (event) => {
-    console.log(event);
+  const handleClick = (row, col, event) => {
     event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleChange = () => {
-    setIsActive((current) => !current);
+    let copy = [...state];
+    copy[row][col] = true;
+    setState(copy);
   };
 
   return (
@@ -145,15 +142,17 @@ function Mentee() {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr onClick={(event) => handleClick(event)}>
+                        <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
                             <td
                               key={index}
                               style={{
-                                backgroundColor: isActive ? "salmon" : "",
-                                color: isActive ? "white" : "",
+                                backgroundColor: state[0][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[0][index] ? "white" : "",
                               }}
-                              onClick={handleChange}
+                              onClick={(event) => handleClick(0, index, event)}
                             >
                               7:00{" "}
                             </td>
@@ -161,77 +160,242 @@ function Mentee() {
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>8:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[1][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[1][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(1, index, event)}
+                            >
+                              8:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>9:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[2][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[2][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(2, index, event)}
+                            >
+                              9:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>10:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[3][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[3][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(3, index, event)}
+                            >
+                              10:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>11:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[4][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[4][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(4, index, event)}
+                            >
+                              11:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>12:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[5][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[5][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(5, index, event)}
+                            >
+                              12:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>13:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[6][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[6][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(6, index, event)}
+                            >
+                              13:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>14:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[7][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[7][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(7, index, event)}
+                            >
+                              14:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>15:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[8][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[8][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(8, index, event)}
+                            >
+                              15:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>16:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[9][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[9][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(9, index, event)}
+                            >
+                              16:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>17:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[10][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[10][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(10, index, event)}
+                            >
+                              17:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>18:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[11][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[11][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(11, index, event)}
+                            >
+                              18:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>19:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[12][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[12][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(12, index, event)}
+                            >
+                              19:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>20:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[13][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[13][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(13, index, event)}
+                            >
+                              20:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>21:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[14][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[14][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(14, index, event)}
+                            >
+                              21:00{" "}
+                            </td>
                           ))}
                         </tr>
                         <tr>
                           {Array.from({ length: 7 }).map((_, index) => (
-                            <td key={index}>22:00 </td>
+                            <td
+                              key={index}
+                              style={{
+                                backgroundColor: state[15][index]
+                                  ? "salmon"
+                                  : "",
+                                color: state[15][index] ? "white" : "",
+                              }}
+                              onClick={(event) => handleClick(15, index, event)}
+                            >
+                              22:00{" "}
+                            </td>
                           ))}
                         </tr>
                       </tbody>
