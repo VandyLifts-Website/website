@@ -58,8 +58,8 @@ function Survey() {
 
   const [surveyData, setSurveyData] = useState({
     id: 0,
-    user: {},
-    organization: {},
+    user: 1,
+    organization: 0,
     time_availability: [],
     type_of_person: "",
     max_matches: 0,
@@ -90,8 +90,8 @@ function Survey() {
   const handleSubmit = (event) => {
     event.preventDefault();
     surveyData.id = orgData.id;
-    surveyData.organization = { id: orgData.id, title: orgData.title };
-    surveyData.user = { id: 1, username: "johnnybravo" };
+    surveyData.organization = orgData.id;
+    surveyData.user = 1;
     console.log("Survey Data", surveyData);
     const csrftoken = getCookie("csrftoken");
     const postData = async () => {
@@ -223,24 +223,24 @@ function Survey() {
                     <option selected>Type of Person</option>
                     {orgData.type_of_organization === "Mentor/Mentee" && (
                       <>
-                        <option value="Mentor">Mentor</option>
-                        <option value="Mentee">Mentee</option>
+                        <option value="1">Mentor</option>
+                        <option value="2">Mentee</option>
                       </>
                     )}
                     {orgData.type_of_organization === "Buddy" && (
                       <>
-                        <option value="Buddy">Buddy</option>
+                        <option value="3">Buddy</option>
                       </>
                     )}
                     {orgData.type_of_organization === "Day In The Life" && (
                       <>
-                        <option value="Guide Lifter">Guide Lifter</option>
-                        <option value="Learner Lifter">Learner Lifter</option>
+                        <option value="4">Guide Lifter</option>
+                        <option value="5">Learner Lifter</option>
                       </>
                     )}
                   </select>
                 </div>
-                {surveyData.type_of_person === "Mentor" && (
+                {surveyData.type_of_person === "1" && (
                   <div className="form-outline mb-4">
                     <select
                       className="form-select"

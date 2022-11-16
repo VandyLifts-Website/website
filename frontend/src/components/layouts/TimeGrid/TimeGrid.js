@@ -34,10 +34,9 @@ function TimeGrid({ state, setState, times, data, setData }) {
   // Update the survey data with the time selected
   const manageTime = (row, col, timeID) => {
     if (state[row][col]) {
-      const filtered = times.filter((time) => time.id === parseInt(timeID));
       setData({
         ...data,
-        time_availability: [...data.time_availability, filtered[0]],
+        time_availability: [...data.time_availability, timeID],
       });
     } else {
       const currData = data.time_availability;
