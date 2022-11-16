@@ -1,5 +1,6 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "../../layouts/NavBar/NavBar";
 
@@ -9,6 +10,21 @@ function SignIn() {
     event.preventDefault();
     navigate("/profile");
   };
+
+  function handleCallBackResponse(res) {
+    console.log("Encoded JWT Token: " + res.credential);
+  };
+  useEffect(() => {
+    /*global google*/
+    google.accounts.id.initialize({
+      client_id: "381841134579-jcch1ags5re1siuu45lsjnr24st1fnj5.apps.googleusercontent.com",
+      callback: handleCallBackResponse
+    });
+    google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      {theme: "outline", size: "large"}
+    );
+  },[]);
 
   return (
     <div>
@@ -48,13 +64,9 @@ function SignIn() {
                 >
                   Sign In
                 </button>
-                <button
-                  className="btn btn-outline-primary form-control "
-                  id="submitBtn"
-                  type="submit"
-                >
-                  Sign In with Google
-                </button>
+                <div id="signInDiv">
+                  
+                </div>
               </div>
             </form>
           </div>
