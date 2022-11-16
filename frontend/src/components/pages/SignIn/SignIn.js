@@ -2,7 +2,6 @@
 import React from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import NavBar from "../../layouts/NavBar/NavBar";
 
 function SignIn() {
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ function SignIn() {
 
   return (
     <div>
-      <NavBar isRegister={true} isLogin={false} />
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12 col-lg-6 col-xl-5">

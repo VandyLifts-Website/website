@@ -1,12 +1,7 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/esm/Container";
-import Button from "react-bootstrap/esm/Button";
 import Footer from "../../layouts/Footer/Footer";
-import NavDropdown from "react-bootstrap/NavDropdown";
 import Card from "react-bootstrap/Card";
 import CardGroup from "react-bootstrap/CardGroup";
 
@@ -16,32 +11,6 @@ function About() {
       className="about"
       style={{ display: "flex", flexDirection: "column", height: "100%" }}
     >
-      <Navbar bg="light" variant="light">
-        <Container>
-          <Navbar.Brand href="/">
-            <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
-          </Navbar.Brand>
-          <Nav
-            className="me-auto"
-            style={{ fontWeight: "bold", color: "purple" }}
-          >
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <NavDropdown title="Fill a Survey" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/survey">Mentor Survey</NavDropdown.Item>
-              <NavDropdown.Item href="/survey">Mentee Survey</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
-                Day in the Life of a Lifer
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="/about">Club Information</Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Button href="/signin" variant="outline-warning">
-              Sign Out
-            </Button>
-          </Form>
-        </Container>
-      </Navbar>
       <section
         className="section"
         style={{ paddingTop: "40px", paddingBottom: "40px", flex: "1 0 auto" }}
@@ -123,21 +92,33 @@ function About() {
               />
               <CardGroup style={{ marginBottom: "30px" }}>
                 <Card className="ml-3">
-                  <Card.Img variant="top" src="/images/letter_h.png" />
+                  <Card.Img
+                    variant="top"
+                    src="/images/letter_h.png"
+                    style={{ height: "280px" }}
+                  />
                   <Card.Body>
                     <Card.Title>PRESIDENT</Card.Title>
                     <Card.Text>Melanie Leguizamon</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card className="ml-3">
-                  <Card.Img variant="top" src="/images/letter_m.png" />
+                  <Card.Img
+                    variant="top"
+                    src="/images/letter_m.png"
+                    style={{ height: "280px" }}
+                  />
                   <Card.Body>
                     <Card.Title>VICE PRESIDENT</Card.Title>
                     <Card.Text>Henry Jonokuchi</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card className="ml-3">
-                  <Card.Img variant="top" src="/images/letter_m.png" />
+                  <Card.Img
+                    variant="top"
+                    src="/images/letter_m.png"
+                    style={{ height: "280px" }}
+                  />
                   <Card.Body>
                     <Card.Title>TREASURER</Card.Title>
                     <Card.Text>Matthew Stein II</Card.Text>

@@ -1,13 +1,7 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/esm/Container";
 import Accordion from "react-bootstrap/Accordion";
-import NavDropdown from "react-bootstrap/NavDropdown";
 
 // const LiftingStyle = (olympic, power_lifting) => {
 //   if (olympic) {
@@ -17,12 +11,15 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 //   }
 // };
 
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+
 function Profile() {
   const [data, setData] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios("http://localhost:8000/api/matches/");
+      const response = await axios("/api/matches/");
       console.log(response);
 
       if (response.status !== 200) {
@@ -55,37 +52,6 @@ function Profile() {
 
   return (
     <div>
-      <Navbar bg="light" variant="light">
-        <Container>
-          <Navbar.Brand href="/">
-            <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
-          </Navbar.Brand>
-          <Nav
-            className="me-auto"
-            style={{ fontWeight: "bold", color: "purple" }}
-          >
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <NavDropdown title="Fill a Survey" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/survey/mentor">
-                Mentor Survey
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/survey/mentee">
-                Mentee Survey
-              </NavDropdown.Item>
-              <NavDropdown.Item href="/survey/buddy">
-                Buddy Survey
-              </NavDropdown.Item>
-            </NavDropdown>
-            <Nav.Link href="/about">Club Information</Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Button href="/signin" variant="outline-warning">
-              Sign Out
-            </Button>
-          </Form>
-        </Container>
-      </Navbar>
-
       <section className="h-100 gradient-custom-2">
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">

@@ -1,36 +1,43 @@
-import React from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/esm/Container";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
-import Form from "react-bootstrap/Form";
+import { Link } from "react-router-dom";
 
 function SurveySelect() {
+  const [orgData, setOrgData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get(`/api/organizations/`);
+      console.log("Response", response);
+
+      if (response.status !== 200) {
+        console.log("Error status:", response.status);
+        throw new Error(`Error! status: ${response.status}`);
+      }
+
+      setOrgData(response.data);
+    };
+
+    fetchData().catch((err) => {
+      console.log(err.message);
+    });
+  }, []);
+
+  const orgList = orgData?.map((org) => {
+    return (
+      <Link key={org.id} to={`/organizations/${org.id}`}>
+        <Button variant="primary" size="lg" style={{ width: "400px" }}>
+          {org.title}
+        </Button>
+      </Link>
+    );
+  });
+
   return (
     <div>
-      <Navbar bg="light" variant="light">
-        <Container>
-          <Navbar.Brand href="/">
-            <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
-          </Navbar.Brand>
-          <Nav
-            className="me-auto"
-            style={{ fontWeight: "bold", color: "purple" }}
-          >
-            <Nav.Link href="/profile">Profile</Nav.Link>
-            <Nav.Link href="/surveys">Join an Org</Nav.Link>
-            <Nav.Link href="/about">Club Information</Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Button href="/signin" variant="outline-warning">
-              Sign Out
-            </Button>
-          </Form>
-        </Container>
-      </Navbar>
-
       <div
-        className="d-grid gap-2 col-md-6 offset-md-3"
+        className="d-grid gap-2"
         style={{
           margin: "0",
           position: "absolute",
@@ -40,15 +47,7 @@ function SurveySelect() {
           transform: "translate(-50%, -50%)",
         }}
       >
-        <Button href="/survey/mentor" variant="primary" size="lg">
-          Mentor Application
-        </Button>
-        <Button href="/survey/mentee" variant="primary" size="lg">
-          Mentee Application
-        </Button>
-        <Button href="/survey/buddy" variant="primary" size="lg">
-          Buddy Application
-        </Button>
+        {orgList}
       </div>
     </div>
   );
