@@ -6,8 +6,27 @@ import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import axios from "axios";
 
 function NavBar(props) {
+  const getCookie = (name) => {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        // Does this cookie string begin with the name we want?
+        if (cookie.substring(0, name.length + 1) === name + "=") {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  };
+
+  const csrftoken = getCookie("csrftoken");
+
   return (
     <Navbar bg="light" variant="light">
       <Container>
@@ -15,10 +34,13 @@ function NavBar(props) {
           <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
         </Navbar.Brand>
         {!props.isLoggedIn ? (
-          <Form className="d-flex">
-            <Link to="/signin" className="btn btn-outline-primary">
-              Sign In
-            </Link>
+          <Form
+            className="d-flex"
+            action="/accounts/google/login/"
+            method="post"
+          >
+            <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
+            <button type="submit">signin</button>
           </Form>
         ) : (
           <>
@@ -30,10 +52,13 @@ function NavBar(props) {
               <Nav.Link href="/organizations">Join an Organization</Nav.Link>
               <Nav.Link href="/about">Club Information</Nav.Link>
             </Nav>
-            <Form className="d-flex">
-              <Button href="/signin" variant="outline-warning">
-                Sign Out
-              </Button>
+            <Form className="d-flex" action="/accounts/logout/" method="post">
+              <input
+                type="hidden"
+                name="csrfmiddlewaretoken"
+                value={csrftoken}
+              />
+              <button type="submit">Sign Out</button>
             </Form>
           </>
         )}

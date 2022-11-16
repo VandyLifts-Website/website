@@ -18,7 +18,7 @@ from django.urls import path, include
 from rest_framework import routers
 from VandyLifts import views
 from django.views.generic import TemplateView
-from django.contrib.auth.views import LogoutView
+
 
 router = routers.DefaultRouter()
 router.register(r'time_availability', views.TimeAvailabilityView, 'time_availability')
@@ -32,5 +32,5 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', TemplateView.as_view(template_name="index.html")),
     path('accounts/', include('allauth.urls')),
-    path('logout', LogoutView.as_view()),
+    
 ]
