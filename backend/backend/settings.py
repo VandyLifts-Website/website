@@ -19,11 +19,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 try:
-    SECRET_KEY = os.environ["SECRET_KEY"]
+    SECRET_KEY = "Beans"
 except KeyError as e:
     raise RuntimeError("Could not find a SECRET_KEY in the enviroment") from e
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', '.vandylifts.com']
 # ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
@@ -198,3 +198,4 @@ SITE_ID = 2
 LOGIN_REDIRECT_URL = 'http://localhost:3000/'
 LOGOUT_REDIRECT_URL = '/'
 SESSION_COOKIE_HTTPONLY = False
+

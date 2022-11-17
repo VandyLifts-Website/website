@@ -48,6 +48,8 @@ class IsSurveySubmissionUser(BasePermission):
     message = 'You can only access your own Survey Submissions.'
 
     def has_object_permission(self, request, view, obj):
+        if obj.user is None:
+            obj.user = request.user
         return obj.user == request.user
 
     def has_permission(self, request, view):
@@ -57,7 +59,7 @@ class IsSurveySubmissionUser(BasePermission):
 class SurveySubmissionView(viewsets.ModelViewSet):
     queryset = SurveySubmission.objects.all()
     filterset_fields = ['organization', 'type_of_person']
-    permission_classes = [IsAuthenticated, IsAdminUser | IsSurveySubmissionUser]
+    permission_classes = [IsAuthenticated, IsSurveySubmissionUser | IsAdminUser]
 
     def get_serializer_class(self):
         if self.action == 'list':
