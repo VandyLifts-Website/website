@@ -1,11 +1,13 @@
+import threading
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, BasePermission, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .serializers import OrganizationSerializer, OrganizationReadSerializer, SurveySubmissionSerializer, \
     SurveySubmissionReadSerializer, MatchSerializer, MatchReadSerializer, \
     TimeAvailabilityCreateSerializer, TimeAvailabilityReadSerializer
 from .models import Organization, SurveySubmission, Match, TimeAvailability
+from .automatic_matcher_ortools import test
 
 # Author: David Perez
 # Start Date: 9/27/2022
@@ -35,14 +37,27 @@ class OrganizationView(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def calculate_automatic_matches(self, request, pk=None):
-        # run "python ./manage.py calculate_automatic_matches
-        # <organization_id>"
-        return Response("")
+        if pk is not None:
+            p = threading.Thread(target=test, args=(pk,))
+            p.start()
+            return Response("Automatic Matching begun")
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+class IsSurveySubmissionUser(BasePermission):
+    message = 'You can only access your own Survey Submissions.'
+
+    def has_object_permission(self, request, view, obj):
+        return obj.user == request.user
+
+    def has_permission(self, request, view):
+        return view.action != 'list'
 
 
 class SurveySubmissionView(viewsets.ModelViewSet):
     queryset = SurveySubmission.objects.all()
     filterset_fields = ['organization', 'type_of_person']
+    permission_classes = [IsAuthenticated, IsAdminUser | IsSurveySubmissionUser]
 
     def get_serializer_class(self):
         if self.action == 'list':

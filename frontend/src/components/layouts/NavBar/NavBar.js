@@ -14,13 +14,8 @@ function NavBar(props) {
         </Navbar.Brand>
         <Form className="d-flex">
           {props.isLogin && (
-            <Link to="/login" className="btn btn-outline-success">
+            <Link to="/signin" className="btn btn-outline-primary">
               Sign In
-            </Link>
-          )}
-          {props.isRegister && (
-            <Link to="/register" className="ms-2 btn btn-outline-primary">
-              Register
             </Link>
           )}
         </Form>

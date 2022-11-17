@@ -1,10 +1,10 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
-import NavBar from "../layouts/NavBar";
+import NavBar from "../../layouts/NavBar/NavBar";
 
-function Login() {
+function SignIn() {
   return (
-    <div className="login-body">
+    <div>
       <NavBar isRegister={true} isLogin={false} />
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
@@ -35,22 +35,19 @@ function Login() {
                     placeholder="Password"
                   />
                 </div>
-                <div className="form-check d-flex justify-content-start mb-4">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    uncheked="true"
-                  />
-                  <label className="form-check-label ms-2">
-                    Remember Password
-                  </label>
-                </div>
                 <button
-                  className="btn btn-outline-success btn-block"
+                  className="btn btn-outline-success form-control mb-4"
                   id="submitBtn"
                   type="submit"
                 >
-                  Login
+                  Sign In
+                </button>
+                <button
+                  className="btn btn-outline-primary form-control "
+                  id="submitBtn"
+                  type="submit"
+                >
+                  Sign In with Google
                 </button>
               </div>
             </form>
@@ -61,4 +58,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignIn;
