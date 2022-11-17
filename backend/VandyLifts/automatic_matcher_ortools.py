@@ -1,6 +1,8 @@
 from threading import Timer
 from time import perf_counter
 
+from .models import Match, Organization, SurveySubmission
+
 from ortools.sat.python import cp_model
 
 # Author: David Perez
@@ -61,6 +63,29 @@ class ObjectiveEarlyStopping(cp_model.CpSolverSolutionCallback):
     def StopSearch(self):
         print(f"{self._timer_limit} seconds without improvement")
         super().StopSearch()
+
+def test(org_id):
+        # Get organization
+        organization = Organization.objects.get(pk=org_id)
+
+        # Get mentor's in organization
+        mentors = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTOR).all()  # type: ignore
+
+        # Get mentee's in organization
+        mentees = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTEE).all()  # type: ignore
+
+        # Get times of the organization
+        times = organization.time_choices.all()
+
+        # Get automatic matches
+        results = solve_automatic_matches(organization, mentors, mentees, times)
+
+        # Add matches to database
+        for mentor, mentee, time_matches in results:
+            match = Match(organization=organization, confirmed=False)
+            match.save()
+            match.people.add(mentor, mentee)
+            match.times_matched.add(*time_matches)
 
 
 def solve_automatic_matches(organization, mentors, mentees, times):

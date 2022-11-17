@@ -1,6 +1,8 @@
 from django.db import models
+from django.dispatch import receiver
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 # Author: David Perez
@@ -67,6 +69,7 @@ class SurveySubmission(models.Model):
     time_availability = models.ManyToManyField(TimeAvailability)
     max_matches = models.PositiveIntegerField()
     name = models.CharField(max_length=50)
+    phone_number = PhoneNumberField()
 
     class PersonType(models.TextChoices):
         MENTOR = '1', _('Mentor')
@@ -125,3 +128,7 @@ class Match(models.Model):
 
     def __str__(self):
         return f'[{self.names()}] - {self.organization} - {self.status()} [{", ".join([str(time) for time in self.times_matched.all()])}]'
+
+@receiver(models.signals.pre_delete, sender=SurveySubmission)
+def cascade_delete_match(sender, instance, **kwargs):
+   instance.match_set.all().delete()
