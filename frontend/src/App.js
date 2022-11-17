@@ -2,6 +2,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Admin from "./components/pages/Admin/Admin";
 import Profile from "./components/pages/Profile/Profile";
 import SignIn from "./components/pages/SignIn/SignIn";
 import Landing from "./components/pages/Landing/Landing";
@@ -35,6 +36,7 @@ function App() {
         <Route exact path="/about" element={<About />} />
         <Route exact path="/organizations/:orgId" element={<Survey />} />
         <Route exact path="/organizations" element={<SurveySelect />} />
+        <Route exact path="/organizer" element={<Admin />} />
       </Routes>
     </Router>
   );
