@@ -1,5 +1,6 @@
 from threading import Timer
 from time import perf_counter
+import itertools
 
 from .models import Match, Organization, SurveySubmission
 
@@ -64,38 +65,60 @@ class ObjectiveEarlyStopping(cp_model.CpSolverSolutionCallback):
         print(f"{self._timer_limit} seconds without improvement")
         super().StopSearch()
 
-def test(org_id):
-        # Get organization
-        organization = Organization.objects.get(pk=org_id)
+def solve_automatic_matches(org_id):
+    # Get organization
+    organization = Organization.objects.get(pk=org_id)
 
-        # Get mentor's in organization
+    # Get times of the organization
+    times = organization.time_choices.all()
+
+    if organization.type_of_organization == Organization.OrganizationType.MENTOR_MENTEE:
+        # Get mentors in organization
         mentors = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTOR).all()  # type: ignore
 
-        # Get mentee's in organization
+        # Get mentees in organization
         mentees = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTEE).all()  # type: ignore
+        
+        same_sets = False
 
-        # Get times of the organization
-        times = organization.time_choices.all()
+    elif organization.type_of_organization == Organization.OrganizationType.DAY_IN_THE_LIFE:
+        # Get guides in organization
+        guides = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.GUIDE_LIFTER).all()  # type: ignore
 
-        # Get automatic matches
-        results = solve_automatic_matches(organization, mentors, mentees, times)
+        # Get learners in organization
+        learners = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.LEARNER_LIFER).all()  # type: ignore
 
-        # Add matches to database
-        for mentor, mentee, time_matches in results:
-            match = Match(organization=organization, confirmed=False)
-            match.save()
-            match.people.add(mentor, mentee)
-            match.times_matched.add(*time_matches)
+        mentors = guides
+        mentees = learners
+        same_sets = False
 
+    elif organization.type_of_organization == Organization.OrganizationType.BUDDY:
+        # Get buddies in organization
+        buddies = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.BUDDY).all()  # type: ignore
 
-def solve_automatic_matches(organization, mentors, mentees, times):
+        mentors = buddies
+        mentees = buddies
+        same_sets = True
+
+    else:
+        raise ValueError("Unknown organization type")
+
+    # Get mentor's in organization
+    mentors = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTOR).all()  # type: ignore
+
+    # Get mentee's in organization
+    mentees = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTEE).all()  # type: ignore
+
+    # Get times of the organization
+    times = organization.time_choices.all()
+
     model = cp_model.CpModel()
 
     with catchtime("Creating Bools"):
         # Create 3-dimensional matrix of BoolVars where the BoolVar
         # represents if the Mentor and Mentee are matched at that Time
         # They don't have to meet at that time
-        matrix = [[[model.NewBoolVar(f"{mentor.id}_{mentee.id}_{time.id}")
+        matrix = [[[model.NewBoolVar(f"{mentor.id}_{mentee.id}_{time.id}")  # type: ignore
                     for time in times] for mentee in mentees] for mentor in mentors]
 
         # Collapse the last dimension to make a 2-dimentsional matrix of BoolVars where the BoolVar
@@ -103,30 +126,58 @@ def solve_automatic_matches(organization, mentors, mentees, times):
         matrix_without_time = [[CustomOr(
             model, time_matches) for time_matches in mentee_time_matches] for mentee_time_matches in matrix]
 
+    # same_sets means that the set of mentors is the same as the set of mentees
+    # This is the case for buddy organizations where anyone can be matched with anyone
+    if same_sets:
+        with catchtime("Because same_sets, forbid someone from being matched with themself"):
+            # for idx, (mentor, mentee_matches) in enumerate(zip(mentors, matrix_without_time)):
+            #     model.Add(mentee_matches[idx] == False)
+            #     assert mentor == mentees[idx]
+
+            for idx, (mentor, mentee_matches) in enumerate(zip(mentors, matrix_without_time, strict=True)):
+                for idx2, (mentee, matched) in enumerate(itertools.islice(zip(mentees, mentee_matches, strict=True), idx + 1)):
+                    if idx == idx2:
+                        assert mentor == mentee
+                        model.Add(matched == False)
+                    else:
+                        assert mentor != mentee
+                        model.Add(matched == matrix_without_time[idx2][idx])
+
     with catchtime("Limiting each mentor's number of mentees"):
         # Each mentor has at most max_mentee_preference mentees
         for mentor, mentor_matches in zip(mentors, matrix_without_time, strict=True):
             model.Add(cp_model.LinearExpr.Sum(
-                mentor_matches) <= mentor.max_matches)
+                mentor_matches) <= max(0, mentor.max_matches - mentor.match_set.count()))
 
     with catchtime("Limiting each mentor's number of mentors"):
         # Each mentee has at most max_mentor_preference mentors
         for mentee, mentee_matches in zip(mentees, zip(*matrix_without_time, strict=True), strict=True):
             model.Add(cp_model.LinearExpr.Sum(
-                mentee_matches) <= mentee.max_matches)
+                mentee_matches) <=  max(0, mentee.max_matches - mentee.match_set.count()))
 
     with catchtime("Limiting times mentors can be matched to the times they are available"):
         # If mentor is not availble for a time, they cannot be matched with a mentee at that time
         for mentor, mentor_matches in zip(mentors, matrix, strict=True):
             for time, mentee_matches in zip(times, zip(*mentor_matches, strict=True), strict=True):
-                if not mentor.time_availability.filter(pk=time.id).exists():
+                if (not mentor.time_availability.filter(pk=time.id).exists() or  # type: ignore
+                        mentor.match_set.filter(times_matched=time).exists()):
                     model.Add(cp_model.LinearExpr.Sum(mentee_matches) == 0)
+
+    with catchtime("Limiting times mentors can be matched to the times they are available"):
+        # If mentor is not availble for a time, they cannot be matched with a mentee at that time
+        for mentor, mentor_matches in zip(mentors, matrix_without_time, strict=True):
+            for mentee, matched in zip(mentees, mentor_matches, strict=True):
+                if ((mentor.gender_preference == SurveySubmission.GenderPreference.SAME_GENDER or 
+                    mentee.gender_preference == SurveySubmission.GenderPreference.SAME_GENDER) and 
+                    mentor.gender != mentee.gender):
+                    model.Add(matched == 0)
 
     with catchtime("Limiting times mentees can be matched to the times they are available"):
         # If mentee is not availble for a time, they cannot be matched with a mentor at that time
         for mentee, mentee_matches in zip(mentees, zip(*matrix, strict=True), strict=True):
             for time, mentor_matches in zip(times, zip(*mentee_matches, strict=True), strict=True):
-                if not mentee.time_availability.filter(pk=time.id).exists():
+                if (not mentee.time_availability.filter(pk=time.id).exists() or # type: ignore
+                        mentee.match_set.filter(times_matched=time).exists()):
                     model.Add(cp_model.LinearExpr.Sum(mentor_matches) == 0)
 
     with catchtime("Limiting the number of times matched per match"):
@@ -179,6 +230,16 @@ def solve_automatic_matches(organization, mentors, mentees, times):
             all_mentee_matches) == num_mentee_matches)
         # TODO: Don't hardcode weight
         fitness_components.append((num_mentee_matches, 10))
+
+    with catchtime("Creating the metric of the number of matched preferences with matches"):
+        # Maximize number of matches
+        all_matches = [
+            (has_match, mentor.power_lifting == mentee.power_lifting + mentor.body_building == mentee.body_building + mentor.olympic_lifting == mentee.olympic_lifting)
+            for mentor, mentor_matches in zip(mentors, matrix_without_time, strict=True) for mentee, has_match in zip(mentees, mentor_matches, strict=True)]
+        num_matches = model.NewIntVar(0, len(all_matches), "num_matches")
+        model.Add(cp_model.LinearExpr.WeightedSum(*zip(*all_matches)) == num_matches)
+        # TODO: Don't hardcode weight
+        fitness_components.append((num_matches, 2))
 
     with catchtime("Creating the composite metric"):
         fitness = cp_model.LinearExpr.WeightedSum(
@@ -262,8 +323,24 @@ def solve_automatic_matches(organization, mentors, mentees, times):
                     print((f"{mentor.user.username} - {mentee.user.username} "
                            f"{len([str(time) for time, matches in zip(times, time_matches) if solver.BooleanValue(matches)])}"))
 
-        return [(mentor, mentee, [time for time, b in zip(times, time_matches) if solver.BooleanValue(b)])
+        # Change from multi-dimensional array of symbolic values to concrete results
+        if same_sets:
+            results = [(mentor, mentee, [time for time, b in zip(times, time_matches) if solver.BooleanValue(b)])
+                for idx, (mentor, mentor_matches) in enumerate(zip(mentors, matrix))
+                for mentee, time_matches in itertools.islice(zip(mentees, mentor_matches), idx)
+                if any(solver.BooleanValue(time) for time in time_matches)]
+        else:
+            results = [(mentor, mentee, [time for time, b in zip(times, time_matches) if solver.BooleanValue(b)])
                 for mentor, mentor_matches in zip(mentors, matrix)
                 for mentee, time_matches in zip(mentees, mentor_matches)
                 if any(solver.BooleanValue(time) for time in time_matches)]
+
+        # Add matches to database
+        for mentor, mentee, time_matches in results:
+            match = Match(organization=organization, confirmed=False)
+            match.save()
+            match.people.add(mentor, mentee)
+            match.times_matched.add(*time_matches)
+
+        return results
     return []

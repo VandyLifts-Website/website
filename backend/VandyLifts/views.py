@@ -7,7 +7,7 @@ from .serializers import OrganizationSerializer, OrganizationReadSerializer, Sur
     SurveySubmissionReadSerializer, MatchSerializer, MatchReadSerializer, \
     TimeAvailabilityCreateSerializer, TimeAvailabilityReadSerializer
 from .models import Organization, SurveySubmission, Match, TimeAvailability
-from .automatic_matcher_ortools import test
+from .automatic_matcher_ortools import solve_automatic_matches
 
 # Author: David Perez
 # Start Date: 9/27/2022
@@ -38,7 +38,7 @@ class OrganizationView(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
     def calculate_automatic_matches(self, request, pk=None):
         if pk is not None:
-            p = threading.Thread(target=test, args=(pk,))
+            p = threading.Thread(target=solve_automatic_matches, args=(pk,))
             p.start()
             return Response("Automatic Matching begun")
         else:
@@ -58,6 +58,7 @@ class IsSurveySubmissionUser(BasePermission):
 
 class SurveySubmissionView(viewsets.ModelViewSet):
     queryset = SurveySubmission.objects.all()
+    # queryset = SurveySubmission.objects.prefetch_related('user').prefetch_related('organization').prefetch_related('time_availability').all()
     filterset_fields = ['organization', 'type_of_person']
     permission_classes = [IsAuthenticated, IsSurveySubmissionUser | IsAdminUser]
 
