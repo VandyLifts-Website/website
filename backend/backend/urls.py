@@ -25,6 +25,7 @@ router.register(r'time_availability', views.TimeAvailabilityView, 'time_availabi
 router.register(r'organizations', views.OrganizationView, 'organizations')
 router.register(r'survey_submissions', views.SurveySubmissionView, 'survey_submissions')
 router.register(r'matches', views.MatchView, 'matches')
+router.register(r'user', views.UserViewSet, 'user')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,5 +33,4 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('', TemplateView.as_view(template_name="index.html")),
     path('accounts/', include('allauth.urls')),
-    
 ]

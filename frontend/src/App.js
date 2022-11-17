@@ -13,11 +13,14 @@ import SurveySelect from "./components/pages/SurveySelect/SurveySelect";
 import NavBar from "./components/layouts/NavBar/NavBar";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({
+    is_logged_in: false,
+    is_admin: false,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`/api/survey_submissions/is_logged_in`);
+      const response = await axios.get(`/api/user/get_user_data/`);
 
       if (response.status !== 200) {
         console.log("Error status:", response.status);
@@ -26,7 +29,7 @@ function App() {
 
       console.log("Response data", response.data);
 
-      setIsLoggedIn(response.data);
+      setUserData(response.data);
     };
 
     fetchData().catch((err) => {
@@ -36,7 +39,7 @@ function App() {
 
   return (
     <Router>
-      <NavBar isLoggedIn={isLoggedIn} />
+      <NavBar userData={userData} />
       <Routes>
         <Route exact path="/" element={<Landing />} />
         <Route exact path="/profile" element={<Profile />} />

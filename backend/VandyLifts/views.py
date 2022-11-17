@@ -3,9 +3,10 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAdminUser, BasePermission, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import viewsets, status
+from django.contrib.auth.models import User
 from .serializers import OrganizationSerializer, OrganizationReadSerializer, SurveySubmissionSerializer, \
     SurveySubmissionReadSerializer, MatchSerializer, MatchReadSerializer, \
-    TimeAvailabilityCreateSerializer, TimeAvailabilityReadSerializer
+    TimeAvailabilityCreateSerializer, TimeAvailabilityReadSerializer, UserSerializer
 from .models import Organization, SurveySubmission, Match, TimeAvailability
 from .automatic_matcher_ortools import solve_automatic_matches
 
@@ -44,6 +45,7 @@ class OrganizationView(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 class IsSurveySubmissionUser(BasePermission):
     message = 'You can only access your own Survey Submissions.'
 
@@ -60,7 +62,8 @@ class SurveySubmissionView(viewsets.ModelViewSet):
     queryset = SurveySubmission.objects.all()
     # queryset = SurveySubmission.objects.prefetch_related('user').prefetch_related('organization').prefetch_related('time_availability').all()
     filterset_fields = ['organization', 'type_of_person']
-    permission_classes = [IsAuthenticated, IsSurveySubmissionUser | IsAdminUser]
+    permission_classes = [IsAuthenticated,
+                          IsSurveySubmissionUser | IsAdminUser]
 
     def get_serializer_class(self):
         if self.action == 'list':
@@ -68,10 +71,6 @@ class SurveySubmissionView(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return SurveySubmissionReadSerializer
         return SurveySubmissionSerializer
-
-    @action(detail=False, methods=['get'])
-    def is_logged_in(self, request):
-        return Response(request.user is not None)
 
 
 class MatchView(viewsets.ModelViewSet):
@@ -85,4 +84,18 @@ class MatchView(viewsets.ModelViewSet):
             return MatchReadSerializer
         return MatchSerializer
 
-    
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    This viewset automatically provides `list` and `retrieve` actions.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAdminUser]
+
+    @action(detail=False, methods=['get'], permission_classes=[])
+    def get_user_data(self, request):
+        return Response({
+            "is_logged_in": request.user.is_authenticated,
+            "is_admin": request.user.is_staff and request.user.is_superuser
+        })

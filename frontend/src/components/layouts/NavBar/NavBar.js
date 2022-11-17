@@ -15,7 +15,7 @@ function NavBar(props) {
         <Navbar.Brand href="/">
           <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
         </Navbar.Brand>
-        {!props.isLoggedIn ? (
+        {!props.userData.is_logged_in ? (
           <Form
             className="d-flex"
             action="/accounts/google/login/"
@@ -34,7 +34,7 @@ function NavBar(props) {
             >
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/organizations">Join an Organization</Nav.Link>
-              <Nav.Link href="/organizer">Organizer</Nav.Link>
+              {props.userData.is_admin && (<Nav.Link href="/organizer">Organizer</Nav.Link>)}
               <Nav.Link href="/about">Club Information</Nav.Link>
             </Nav>
             <Form className="d-flex" action="/accounts/logout/" method="post">
