@@ -69,6 +69,10 @@ class SurveySubmissionView(viewsets.ModelViewSet):
             return SurveySubmissionReadSerializer
         return SurveySubmissionSerializer
 
+    @action(detail=False, methods=['get'])
+    def is_logged_in(self, request):
+        return Response(request.user is not None)
+
 
 class MatchView(viewsets.ModelViewSet):
     queryset = Match.objects.all()
@@ -80,3 +84,5 @@ class MatchView(viewsets.ModelViewSet):
         if self.action == 'retrieve':
             return MatchReadSerializer
         return MatchSerializer
+
+    
