@@ -6,7 +6,7 @@ function Landing() {
   return (
     <div>
       <div className="intro-body">
-        <div className="intro">
+        {/* <div className="intro">
           <div className="banner">
             Look Fit.
             <br />
@@ -15,7 +15,7 @@ function Landing() {
           <p className="body-paragraph">
             A Premier Weightlifting Mentorship Program, no strings attached
           </p>
-        </div>
+        </div> */}
       </div>
       <section>
         <div
@@ -25,10 +25,10 @@ function Landing() {
           <div className="row about-extra">
             <div className="col-lg-6 wow fadeInUp">
               <img
-                src="/images/mentee.png"
+                src="/images/Mentee.png"
                 className="img-fluid"
                 alt="#"
-                style={{ borderRadius: "50px" }}
+                style={{ borderRadius: "20px" }}
               />
             </div>
             <div className="col-lg-6 wow fadeInUp pt-4 pt-lg-0">
@@ -53,7 +53,7 @@ function Landing() {
                 src="/images/mentor.png"
                 className="img-fluid"
                 alt=""
-                style={{ borderRadius: "50px" }}
+                style={{ borderRadius: "20px" }}
               />
             </div>
             <div className="col-lg-6 wow fadeInUp pt-4 pt-lg-0 order-2 order-lg-1">
@@ -77,7 +77,7 @@ function Landing() {
                 src="/images/buddy.png"
                 className="img-fluid"
                 alt="#"
-                style={{ borderRadius: "50px" }}
+                style={{ borderRadius: "20px" }}
               />
             </div>
             <div className="col-lg-6 wow fadeInUp pt-5 pt-lg-0">
@@ -100,11 +100,13 @@ function Landing() {
                 src="/images/dayinlife.png"
                 className="img-fluid"
                 alt=""
-                style={{ borderRadius: "50px" }}
+                style={{ borderRadius: "20px" }}
               />
             </div>
             <div className="col-lg-6 wow fadeInUp pt-4 pt-lg-0 order-2 order-lg-1">
-              <h4 style={{ marginTop: "40px" }}>Get mentored!</h4>
+              <h4 style={{ marginTop: "40px" }}>
+                Day in the Life of a Lifter!
+              </h4>
               <p>
                 Not sure if you want to commit to going to the gym consistently
                 yet? Have a schedule that is too variable that you don’t have a

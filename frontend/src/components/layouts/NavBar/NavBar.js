@@ -29,6 +29,7 @@ function NavBar(props) {
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/organizations">Join an Organization</Nav.Link>
               <Nav.Link href="/about">Club Information</Nav.Link>
+              <Nav.Link href="/organizer">Organizer</Nav.Link>
             </Nav>
             <Form className="d-flex">
               <Button href="/signin" variant="outline-warning">
