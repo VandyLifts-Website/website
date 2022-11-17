@@ -116,7 +116,7 @@ function Profile() {
   const handleClick2 = async (event) => {
     event.preventDefault();
 
-    const response = await axios.post(`/api/organization/1/calculate_automatic_matches/`, {}, {
+    const response = await axios.post(`/api/organizations/1/calculate_automatic_matches/`, {}, {
       headers: {
         // Overwrite Axios's automatically set Content-Type
         "Content-Type": "application/json",
