@@ -23,7 +23,7 @@ try:
 except KeyError as e:
     raise RuntimeError("Could not find a SECRET_KEY in the enviroment") from e
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', '.vandylifts.com']
 # ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
