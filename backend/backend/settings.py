@@ -11,21 +11,27 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hxlaqbd@b$@978j55&6n3i7^p_h*8&t$^zwqwz(&o^g)+4ccf#'
-
+try:
+    SECRET_KEY = os.environ["SECRET_KEY"]
+except KeyError as e:
+    raise RuntimeError("Could not find a SECRET_KEY in the enviroment") from e
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', '.vandylifts.com']
 # ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+
+STATIC_URL = "/dj_static/"
+STATIC_ROOT = "/var/www/vandylifts.com/static"
+STATICFILES_DIRS = [ BASE_DIR /  "../frontend/build"]
+
 
 # Application definition
 
@@ -122,8 +128,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
