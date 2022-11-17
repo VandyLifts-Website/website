@@ -5,6 +5,16 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* background: linear-gradient(
+      180deg,
+      rgba(10, 39, 51, 0.8),
+      rgba(10, 39, 51, 0.8)
+    ),
+    url("../public/images/vandy_rec.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover; */
 }
 
 code {

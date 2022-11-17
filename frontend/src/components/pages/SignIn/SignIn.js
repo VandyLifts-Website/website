@@ -1,19 +1,17 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
-import NavBar from "../../layouts/NavBar/NavBar";
+
 
 function SignIn() {
+
   return (
     <div>
-      <NavBar isRegister={true} isLogin={false} />
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12 col-lg-6 col-xl-5">
             <form
               className="card shadow-2-strong"
               style={{ borderRadius: "1rem" }}
-              action="/login"
-              method="post"
             >
               <div className="card-body p-5 text-center">
                 <h3 className="mb-5">Sign In</h3>
@@ -42,13 +40,9 @@ function SignIn() {
                 >
                   Sign In
                 </button>
-                <button
-                  className="btn btn-outline-primary form-control "
-                  id="submitBtn"
-                  type="submit"
-                >
-                  Sign In with Google
-                </button>
+                <div id="signInDiv">
+                  
+                </div>
               </div>
             </form>
           </div>

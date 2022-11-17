@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Logged out state matches snapshot 1`] = `
+<nav
+  className="navbar navbar-expand navbar-light bg-light"
+>
+  <div
+    className="container"
+  >
+    <a
+      className="navbar-brand"
+      href="/"
+    >
+      <h2
+        style={
+          Object {
+            "color": "#cfae70",
+          }
+        }
+      >
+        VandyLifts
+      </h2>
+    </a>
+    <form
+      className="d-flex"
+    >
+      <a
+        className="btn btn-outline-primary"
+        href="/signin"
+        onClick={[Function]}
+      >
+        Sign In
+      </a>
+    </form>
+  </div>
+</nav>
+`;

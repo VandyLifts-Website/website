@@ -1,11 +1,6 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/esm/Container";
 import Accordion from "react-bootstrap/Accordion";
 
 // const LiftingStyle = (olympic, power_lifting) => {
@@ -16,49 +11,8 @@ import Accordion from "react-bootstrap/Accordion";
 //   }
 // };
 
-function getCookie(name) {
-  let cookieValue = null;
-  if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-          }
-      }
-  }
-  return cookieValue;
-}
-
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-function Form2() {
-  function handleSubmit(e) {
-    e.preventDefault();
-    const postData = async () => {
-      const response = await axios.post('http://example.com/api/time_availability/', {
-        day: '1',
-        time: '01:01:00'
-      },  {
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      console.log(response)
-    }
-    postData().catch(err => {
-      console.log(err);
-    })  }
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <Button type="submit">Submit</Button>
-    </form>
-  );
-}
+axios.defaults.xsrfCookieName = "csrftoken";
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 function Profile() {
   const [data, setData] = useState({});
@@ -98,26 +52,7 @@ function Profile() {
 
   return (
     <div>
-      <Navbar bg="light" variant="light">
-        <Container>
-          <Navbar.Brand href="/">
-            <h2 style={{ color: "#cfae70" }}>VandyLifts</h2>
-          </Navbar.Brand>
-          <Nav
-            className="me-auto"
-            style={{ fontWeight: "bold", color: "purple" }}
-          >
-            <Nav.Link href="#home">My Orgs</Nav.Link>
-            <Nav.Link href="#features">Join an Org</Nav.Link>
-            <Nav.Link href="#pricing">Learn Lifting</Nav.Link>
-            <Nav.Link href="#pricing">Club Information</Nav.Link>
-          </Nav>
-          <Form className="d-flex">
-            <Button variant="outline-warning">Sign Out</Button>
-          </Form>
-        </Container>
-      </Navbar>
-      <section className="profile h-100 gradient-custom-2">
+      <section className="h-100 gradient-custom-2">
         <div className="container py-5 h-100">
           <div className="row d-flex justify-content-center align-items-center h-100">
             <div className="col col-sm-9 col-xl-7">
@@ -130,11 +65,10 @@ function Profile() {
                     className="ms-4 mt-5 d-flex flex-column"
                     style={{ width: "150px" }}
                   >
-                    <img src="/images/profile_pic.jfif" alt="My profile" />
+                    <img src="/images/profile.jpg" alt="My profile" />
                   </div>
                   <div className="ms-3" style={{ marginTop: "130px" }}>
                     <h5>John Doe</h5>
-                    <Form2 />
                     <p>john.doe@vanderbilt.edu</p>
                   </div>
                 </div>
