@@ -5,18 +5,7 @@ import Footer from "../../layouts/Footer/Footer";
 function Landing() {
   return (
     <div>
-      <div className="intro-body">
-        {/* <div className="intro">
-          <div className="banner">
-            Look Fit.
-            <br />
-            Feel Fit.
-          </div>
-          <p className="body-paragraph">
-            A Premier Weightlifting Mentorship Program, no strings attached
-          </p>
-        </div> */}
-      </div>
+      <div className="intro-body"></div>
       <section>
         <div
           className="container"
@@ -25,7 +14,7 @@ function Landing() {
           <div className="row about-extra">
             <div className="col-lg-6 wow fadeInUp">
               <img
-                src="/images/Mentee.png"
+                src="/images/mentee.png"
                 className="img-fluid"
                 alt="#"
                 style={{ borderRadius: "20px" }}
