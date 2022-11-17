@@ -24,15 +24,15 @@ class Command(BaseCommand):
         # Get times of the organization
         times = organization.time_choices.all()
 
-        # Get automatic matches
-        results = solve_automatic_matches(organization, mentors, mentees, times)
-        self.stdout.write(self.style.SUCCESS('Matches: %s' % results))
+        # # Get automatic matches
+        # results = solve_automatic_matches(organization, mentors, mentees, times)
+        # self.stdout.write(self.style.SUCCESS('Matches: %s' % results))
 
-        # Add matches to database
-        for mentor, mentee, time_matches in results:
-            match = Match(organization=organization, confirmed=False)
-            match.save()
-            match.people.add(mentor, mentee)
-            match.times_matched.add(*time_matches)
+        # # Add matches to database
+        # for mentor, mentee, time_matches in results:
+        #     match = Match(organization=organization, confirmed=False)
+        #     match.save()
+        #     match.people.add(mentor, mentee)
+        #     match.times_matched.add(*time_matches)
 
-        self.stdout.write(self.style.SUCCESS('Added all matches'))
+        # self.stdout.write(self.style.SUCCESS('Added all matches'))

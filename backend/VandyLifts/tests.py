@@ -105,43 +105,44 @@ class MyTests(TestCase):
         cls.user = User.objects.create_superuser(
             'UnitTestUser', cls.email, cls.password)
 
-        # Create Organization
-        cls.org = Organization.objects.create(
-            title='UnitTestOrg', owner=cls.user, max_time_matches=15, num_time_matches_weight=1, num_matches_weight=100)
-
-        # Add all time choices to the organization
-        cls.times = TimeAvailability.objects.all()
-        cls.org.time_choices.set(cls.times)
-
     def test1(self):
+        # Create Organization
+        org = Organization.objects.create(
+            title='UnitTestOrg', type_of_organization=Organization.OrganizationType.MENTOR_MENTEE, owner=self.user, max_time_matches=15, num_time_matches_weight=1, num_matches_weight=100)    
+        
+        # Add all time choices to the organization
+        times = TimeAvailability.objects.all()
+        org.time_choices.set(times)
+
         # Create two users
         user1 = User.objects.create_user('user01', self.email, self.password)
         user2 = User.objects.create_user('user02', self.email, self.password)
 
         # Sumbit a survey for both users
         ss1 = SurveySubmission.objects.create(
-            user=user1, organization=self.org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.MENTOR, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
+            user=user1, organization=org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.MENTOR, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
         ss2 = SurveySubmission.objects.create(
-            user=user2, organization=self.org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.MENTEE, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
+            user=user2, organization=org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.MENTEE, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
 
         # Give both users the same time availability
-        ss1.time_availability.set(self.times.filter(
+        ss1.time_availability.set(times.filter(
             day='1', time=datetime.time(hour=15)))
-        ss2.time_availability.set(self.times.filter(
+        ss2.time_availability.set(times.filter(
             day='1', time=datetime.time(hour=15)))
 
-        mentors = self.org.surveysubmission_set.filter( # type: ignore
-            type_of_person=SurveySubmission.PersonType.MENTOR).all()
-        mentees = self.org.surveysubmission_set.filter( # type: ignore
-            type_of_person=SurveySubmission.PersonType.MENTEE).all()
-        times = self.org.time_choices.all()
-
-        assert len(solve_automatic_matches(
-            self.org, mentors, mentees, times)) == 1
+        assert len(solve_automatic_matches(org.pk)) == 1
 
     def test2(self):
         # with cProfile.Profile() as pr:
         if True:
+            # Create Organization
+            org = Organization.objects.create(
+                title='UnitTestOrg', type_of_organization=Organization.OrganizationType.MENTOR_MENTEE, owner=self.user, max_time_matches=15, num_time_matches_weight=1, num_matches_weight=100)    
+            
+            # Add all time choices to the organization
+            times = TimeAvailability.objects.all()
+            org.time_choices.set(times)
+
             mentors_filename = 'mentors.csv'
 
             with open(mentors_filename, 'r') as csvfile:
@@ -150,7 +151,7 @@ class MyTests(TestCase):
                 next(datareader)
 
                 for _, email, name, _, _, _, preferences, num_mentees, _, _, gender_preference, _, _, _, _, monday, tuesday, wednesday, thursday, friday, saturday, sunday, _, _, _, _, _, _, _, gender in datareader:
-                    handle_user(name, email, self.password, self.org, self.times, SurveySubmission.PersonType.MENTOR, preferences, num_mentees,
+                    handle_user(name, email, self.password, org, times, SurveySubmission.PersonType.MENTOR, preferences, num_mentees,
                                 gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
 
             mentees_filename = 'mentees.csv'
@@ -161,15 +162,75 @@ class MyTests(TestCase):
                 next(datareader)
 
                 for _, name, email, _, preferences, _, num_mentors, _, gender_preference, _, _, _, _, monday, tuesday, wednesday, thursday, friday, saturday, sunday, _, _, _, _, _, _, _, _, gender, _, _ in datareader:
-                    handle_user(name, email, self.password, self.org, self.times, SurveySubmission.PersonType.MENTEE, preferences, num_mentors,
+                    handle_user(name, email, self.password, org, times, SurveySubmission.PersonType.MENTEE, preferences, num_mentors,
                                 gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
 
-            mentors = self.org.surveysubmission_set.filter( # type: ignore
-                type_of_person=SurveySubmission.PersonType.MENTOR).all()
-            mentees = self.org.surveysubmission_set.filter( # type: ignore
-                type_of_person=SurveySubmission.PersonType.MENTEE).all()  
-            times = self.org.time_choices.all()
-            solve_automatic_matches(self.org, mentors, mentees, times)
+            solve_automatic_matches(org.pk)
         # sortby = SortKey.CUMULATIVE
         # ps = pstats.Stats(pr).sort_stats(sortby)
         # ps.print_stats(200)
+
+    def test3(self):
+        # with cProfile.Profile() as pr:
+        if True:
+            # Create Organization
+            org = Organization.objects.create(
+                title='UnitTestOrg', type_of_organization=Organization.OrganizationType.BUDDY, owner=self.user, max_time_matches=15, num_time_matches_weight=1, num_matches_weight=100)    
+            
+            # Add all time choices to the organization
+            times = TimeAvailability.objects.all()
+            org.time_choices.set(times)
+
+            mentors_filename = 'mentors.csv'
+
+            with open(mentors_filename, 'r') as csvfile:
+                datareader = csv.reader(csvfile)
+
+                next(datareader)
+
+                for _, email, name, _, _, _, preferences, num_mentees, _, _, gender_preference, _, _, _, _, monday, tuesday, wednesday, thursday, friday, saturday, sunday, _, _, _, _, _, _, _, gender in datareader:
+                    handle_user(name, email, self.password, org, times, SurveySubmission.PersonType.BUDDY, preferences, num_mentees,
+                                gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+
+            mentees_filename = 'mentees.csv'
+
+            with open(mentees_filename, 'r') as csvfile:
+                datareader = csv.reader(csvfile)
+
+                next(datareader)
+
+                for _, name, email, _, preferences, _, num_mentors, _, gender_preference, _, _, _, _, monday, tuesday, wednesday, thursday, friday, saturday, sunday, _, _, _, _, _, _, _, _, gender, _, _ in datareader:
+                    handle_user(name, email, self.password, org, times, SurveySubmission.PersonType.BUDDY, preferences, num_mentors,
+                                gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday)
+
+            solve_automatic_matches(org.pk)
+        # sortby = SortKey.CUMULATIVE
+        # ps = pstats.Stats(pr).sort_stats(sortby)
+        # ps.print_stats(200)
+
+    def test4(self):
+        # Create Organization
+        org = Organization.objects.create(
+            title='UnitTestOrg', type_of_organization=Organization.OrganizationType.BUDDY, owner=self.user, max_time_matches=15, num_time_matches_weight=1, num_matches_weight=100)    
+        
+        # Add all time choices to the organization
+        times = TimeAvailability.objects.all()
+        org.time_choices.set(times)
+
+        # Create two users
+        user1 = User.objects.create_user('user01', self.email, self.password)
+        user2 = User.objects.create_user('user02', self.email, self.password)
+
+        # Sumbit a survey for both users
+        ss1 = SurveySubmission.objects.create(
+            user=user1, organization=org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.BUDDY, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
+        ss2 = SurveySubmission.objects.create(
+            user=user2, organization=org, max_matches=1, name="TEST", type_of_person=SurveySubmission.PersonType.BUDDY, gender=SurveySubmission.Gender.MALE, gender_preference=SurveySubmission.GenderPreference.ALL)
+
+        # Give both users the same time availability
+        ss1.time_availability.set(times.filter(
+            day='1', time=datetime.time(hour=15)))
+        ss2.time_availability.set(times.filter(
+            day='1', time=datetime.time(hour=15)))
+
+        assert len(solve_automatic_matches(org)) == 1
