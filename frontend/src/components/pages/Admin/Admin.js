@@ -3,11 +3,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
+import csrftoken from "../../../csrftoken.js";
 
 axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
@@ -15,11 +15,12 @@ axios.defaults.xsrfHeaderName = "X-CSRFToken";
 function Profile() {
   const [users, setUsers] = useState([]);
   const [matches, setMatches] = useState([]);
-  //   const [match, setMatch] = ({
-  //     "confirmed": false,
-  //     "people": [],
-  //     "times_matched": []
-  //   })
+  const [match, setMatch] = useState({
+    organization: 1,
+    confirmed: false,
+    people: [],
+    times_matched: [1],
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,7 +50,7 @@ function Profile() {
   const renderUsers = (array) => {
     const values = array?.map((user) => {
       return (
-        <option key={user.id} id={user.id}>
+        <option key={user.id} value={user.id}>
           {user.name}
         </option>
       );
@@ -84,12 +85,27 @@ function Profile() {
     return values;
   };
 
+  const selectUser = (event) => {
+    event.preventDefault();
+
+    setMatch({
+      ...match,
+      people: [...match.people, event.target.value],
+    });
+    console.log("Current match", match);
+  };
+
   const handleClick = async (event) => {
     event.preventDefault();
 
-    const response = await axios.post(
-      `/api/organizations/1/calculate_automatic_matches`
-    );
+    const response = await axios.post(`/api/matches/`, match, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      withCredentials: true,
+    });
 
     if (response.status !== 200) {
       console.log(`Error status: `, response.status);
@@ -149,16 +165,26 @@ function Profile() {
                           <Container>
                             <Row>
                               <Col>
-                                <Form.Select aria-label="Default select example">
-                                  <option>Open this select menu</option>
+                                <select
+                                  id="people"
+                                  className="form-select"
+                                  aria-label="Default select example"
+                                  onChange={selectUser}
+                                >
+                                  <option selected>User A</option>
                                   {renderUsers(users)}
-                                </Form.Select>
+                                </select>
                               </Col>
                               <Col>
-                                <Form.Select aria-label="Default select example">
-                                  <option>Open this select menu</option>
+                                <select
+                                  id="people"
+                                  className="form-select"
+                                  aria-label="Default select example"
+                                  onChange={selectUser}
+                                >
+                                  <option selected>User B</option>
                                   {renderUsers(users)}
-                                </Form.Select>
+                                </select>
                               </Col>
                             </Row>
                             <Button

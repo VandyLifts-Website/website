@@ -4,8 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TimeGrid from "../../layouts/TimeGrid/TimeGrid";
 import Form from "react-bootstrap/Form";
-import Input from 'react-phone-number-input/input';
-import { HandThumbsDown } from "react-bootstrap-icons";
+import Input from "react-phone-number-input/input";
 
 function Survey() {
   const { orgId } = useParams();
@@ -109,6 +108,7 @@ function Survey() {
             "Content-Type": "application/json",
             "X-CSRFToken": csrftoken,
           },
+          withCredentials: true,
         }
       );
       console.log(response);
@@ -137,8 +137,8 @@ function Survey() {
       case "phone_number":
         setSurveyData({
           ...surveyData,
-          [event.target.id]: event.target.value
-        })
+          [event.target.id]: event.target.value,
+        });
         break;
       default:
         console.log("Value: ", event.target.value);
@@ -175,7 +175,12 @@ function Survey() {
                   <Input
                     id="phone_number"
                     placeholder="Enter phone number"
-                    onChange={(phone_num) => setSurveyData({...surveyData, ["phone_number"]: phone_num})}
+                    onChange={(phone_num) =>
+                      setSurveyData({
+                        ...surveyData,
+                        phone_number: phone_num,
+                      })
+                    }
                   />
                 </div>
                 <div className="form-outline mb-4">
