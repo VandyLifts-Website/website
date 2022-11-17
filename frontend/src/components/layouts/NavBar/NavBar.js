@@ -7,7 +7,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import CSRFTOKEN from "../../../csrftoken";
 
-
 function NavBar(props) {
 
   return (
@@ -35,8 +34,8 @@ function NavBar(props) {
             >
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/organizations">Join an Organization</Nav.Link>
-              <Nav.Link href="/about">Club Information</Nav.Link>
               <Nav.Link href="/organizer">Organizer</Nav.Link>
+              <Nav.Link href="/about">Club Information</Nav.Link>
             </Nav>
             <Form className="d-flex" action="/accounts/logout/" method="post">
               <CSRFTOKEN credentials="include"/>

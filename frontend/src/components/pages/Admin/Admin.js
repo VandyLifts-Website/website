@@ -13,9 +13,13 @@ axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 
 function Profile() {
-  //   const [orgs, setOrgs] = useState([]);
   const [users, setUsers] = useState([]);
   const [matches, setMatches] = useState([]);
+  //   const [match, setMatch] = ({
+  //     "confirmed": false,
+  //     "people": [],
+  //     "times_matched": []
+  //   })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,27 +31,10 @@ function Profile() {
       }
 
       const responseJson = surveyResponse.data;
-      console.log("Survey Data", responseJson);
       setUsers(responseJson);
 
       const matchResponse = await axios.get("/api/matches");
-      console.log("Match Response data", matchResponse.data);
-      setMatches(matches);
-
-      //   orgs.forEach(async (org) => {
-      //     const surveyResponse = await axios.get(
-      //       `/api/survey_submissions/?organization=${org.id}&type_of_person=`
-      //     );
-      //     console.log("Survey Response", surveyResponse);
-      //     if (surveyResponse.status !== 200) {
-      //       console.log("Error status:", surveyResponse.status);
-      //       throw new Error(`Error! status: ${surveyResponse.status}`);
-      //     }
-
-      //     console.log("Survey Response Data: ", surveyResponse.data);
-
-      //     setUsers([...users, ...surveyResponse.data]);
-      //   });
+      setMatches(matchResponse.data);
     };
 
     fetchData().catch((err) => {
@@ -59,16 +46,13 @@ function Profile() {
     console.log("User Data", users);
   }
 
-  //   const orgs = new Map();
-  //   users?.forEach((user) =>
-  //     orgs.set(user.organization.title, user.organization.id)
-  //   );
-
-  //   console.log("Existing orgs", orgs);
-
   const renderUsers = (array) => {
     const values = array?.map((user) => {
-      return <option key={user.id}>{user.name}</option>;
+      return (
+        <option key={user.id} id={user.id}>
+          {user.name}
+        </option>
+      );
     });
     return values;
   };
@@ -81,6 +65,19 @@ function Profile() {
           <td>{user.gender}</td>
           <td>{user.type_of_person}</td>
           <td>{user.organization.title}</td>
+        </tr>
+      );
+    });
+    return values;
+  };
+
+  const currentMatches = (array) => {
+    const values = array?.map((match) => {
+      return (
+        <tr key={match.id}>
+          <td>{match?.people[0]?.name}</td>
+          <td>{match?.people[1]?.name}</td>
+          <td>{match?.people[0]?.organization.title}</td>
         </tr>
       );
     });
@@ -115,7 +112,7 @@ function Profile() {
                     className="ms-4 mt-5 d-flex flex-column"
                     style={{ width: "150px" }}
                   >
-                    <img src="/images/admin.png" alt="My profile" />
+                    <img src="/images/admin.png" alt="My admin" />
                   </div>
                   <div className="ms-3" style={{ marginTop: "130px" }}>
                     <h5>Your Admin</h5>
@@ -181,7 +178,11 @@ function Profile() {
                               <tr>
                                 <th>User A</th>
                                 <th>User B</th>
+                                <th>Organization</th>
                               </tr>
+                              {currentMatches(
+                                matches.filter((match) => match.people.length)
+                              )}
                             </thead>
                           </Table>
                           <Button variant="outline-success mt-4">
