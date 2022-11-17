@@ -195,7 +195,12 @@ SOCIALACCOUNT_PROVIDERS = {
 
 SITE_ID = 2
 
-LOGIN_REDIRECT_URL = 'http://localhost:3000/'
-LOGOUT_REDIRECT_URL = '/'
+if DEBUG:
+    LOGOUT_REDIRECT_URL = '/'
+    LOGIN_REDIRECT_URL = 'http://localhost:3000/'
+else:
+    LOGIN_REDIRECT_URL = 'http://vandylifts.com/'
+    LOGOUT_REDIRECT_URL = 'http://vandylifts.com/'
+
 SESSION_COOKIE_HTTPONLY = False
 
