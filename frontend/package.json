@@ -2,7 +2,6 @@
   "name": "vandylifts-frontend",
   "version": "0.1.0",
   "private": true,
-  
   "dependencies": {
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.1.3",
@@ -13,6 +12,7 @@
     "react-bootstrap-icons": "^1.9.1",
     "react-dom": "^18.2.0",
     "react-multiselect-dropdown-bootstrap": "^1.1.0",
+    "react-phone-number-input": "^3.2.12",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "ts-jest": "^29.0.3",

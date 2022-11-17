@@ -4,6 +4,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TimeGrid from "../../layouts/TimeGrid/TimeGrid";
 import Form from "react-bootstrap/Form";
+import Input from 'react-phone-number-input/input';
+import { HandThumbsDown } from "react-bootstrap-icons";
 
 function Survey() {
   const { orgId } = useParams();
@@ -60,6 +62,7 @@ function Survey() {
   const [surveyData, setSurveyData] = useState({
     id: 0,
     user: 1,
+    phone_number: "",
     organization: 0,
     time_availability: [],
     type_of_person: "",
@@ -90,9 +93,10 @@ function Survey() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    surveyData.id = orgData.id;
+    // surveyData.id = orgData.id;
     surveyData.organization = orgData.id;
-    surveyData.user = 1;
+    // surveyData.user = 1;
+    surveyData.max_matches = 1;
     console.log("Survey Data", surveyData);
     const csrftoken = getCookie("csrftoken");
     const postData = async () => {
@@ -130,6 +134,12 @@ function Survey() {
           [event.target.id]: event.target.checked,
         });
         break;
+      case "phone_number":
+        setSurveyData({
+          ...surveyData,
+          [event.target.id]: event.target.value
+        })
+        break;
       default:
         console.log("Value: ", event.target.value);
         setSurveyData({
@@ -159,6 +169,13 @@ function Survey() {
                     placeholder="Name"
                     maxLength={50}
                     onChange={handleInputChange}
+                  />
+                </div>
+                <div className="form-outline mb-4">
+                  <Input
+                    id="phone_number"
+                    placeholder="Enter phone number"
+                    onChange={(phone_num) => setSurveyData({...surveyData, ["phone_number"]: phone_num})}
                   />
                 </div>
                 <div className="form-outline mb-4">
