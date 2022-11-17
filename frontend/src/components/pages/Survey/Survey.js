@@ -1,12 +1,13 @@
 /* Copyright Joshua Payne & Paul Opiyo @2022 - All rights reserved */
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import TimeGrid from "../../layouts/TimeGrid/TimeGrid";
 import Form from "react-bootstrap/Form";
 
 function Survey() {
   const { orgId } = useParams();
+  const navigate = useNavigate();
   const [orgData, setOrgData] = useState({});
   const [times, setTimes] = useState([]);
   const [stateGrid, setStateGrid] = useState([
@@ -111,6 +112,10 @@ function Survey() {
     postData().catch((err) => {
       console.log(err);
     });
+
+    setTimeout(() => {
+      navigate(`/profile`);
+    }, 1000);
   };
 
   const handleInputChange = (event) => {
@@ -125,15 +130,6 @@ function Survey() {
           [event.target.id]: event.target.checked,
         });
         break;
-      // case "gender":
-      // case "gender_preference":
-      // case "type_of_person":
-      //   console.log("Selected Index: ", event.target.value);
-      //   setData({
-      //     ...data,
-      //     [event.target.id]: event.options[event.selectedIndex].text,
-      //   });
-      //   break;
       default:
         console.log("Value: ", event.target.value);
         setSurveyData({
@@ -141,8 +137,6 @@ function Survey() {
           [event.target.id]: event.target.value,
         });
     }
-
-    console.log("Data", surveyData);
   };
 
   return (

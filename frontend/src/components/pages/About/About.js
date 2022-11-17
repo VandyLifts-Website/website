@@ -94,7 +94,7 @@ function About() {
                 <Card className="ml-3">
                   <Card.Img
                     variant="top"
-                    src="/images/letter_h.png"
+                    src="/images/user.png"
                     style={{ height: "280px" }}
                   />
                   <Card.Body>
@@ -105,7 +105,7 @@ function About() {
                 <Card className="ml-3">
                   <Card.Img
                     variant="top"
-                    src="/images/letter_m.png"
+                    src="/images/user.png"
                     style={{ height: "280px" }}
                   />
                   <Card.Body>
@@ -116,7 +116,7 @@ function About() {
                 <Card className="ml-3">
                   <Card.Img
                     variant="top"
-                    src="/images/letter_m.png"
+                    src="/images/user.png"
                     style={{ height: "280px" }}
                   />
                   <Card.Body>
@@ -127,7 +127,7 @@ function About() {
                 <Card>
                   <Card.Img
                     variant="top"
-                    src="/images/letter_c.png"
+                    src="/images/user.png"
                     style={{ height: "280px" }}
                   />
                   <Card.Body>

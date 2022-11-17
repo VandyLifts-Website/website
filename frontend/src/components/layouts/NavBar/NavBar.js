@@ -6,7 +6,6 @@ import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-
 function NavBar(props) {
   const getCookie = (name) => {
     let cookieValue = null;
@@ -51,8 +50,8 @@ function NavBar(props) {
             >
               <Nav.Link href="/profile">Profile</Nav.Link>
               <Nav.Link href="/organizations">Join an Organization</Nav.Link>
-              <Nav.Link href="/about">Club Information</Nav.Link>
               <Nav.Link href="/organizer">Organizer</Nav.Link>
+              <Nav.Link href="/about">Club Information</Nav.Link>
             </Nav>
             <Form className="d-flex" action="/accounts/logout/" method="post">
               <input
