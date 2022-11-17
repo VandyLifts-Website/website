@@ -113,6 +113,24 @@ function Profile() {
     }
   };
 
+  const handleClick2 = async (event) => {
+    event.preventDefault();
+
+    const response = await axios.post(`/api/organization/1/calculate_automatic_matches/`, {}, {
+      headers: {
+        // Overwrite Axios's automatically set Content-Type
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      withCredentials: true,
+    });
+
+    if (response.status !== 200) {
+      console.log(`Error status: `, response.status);
+      throw new Error(`Error! Status: ${response.status}`);
+    }
+  };
+
   return (
     <div>
       <section className="h-100 gradient-custom-2">
@@ -192,6 +210,12 @@ function Profile() {
                               onClick={handleClick}
                             >
                               Create a Match
+                            </Button>
+                            <Button
+                              variant="outline-primary mt-4"
+                              onClick={handleClick2}
+                            >
+                              Automatic Match
                             </Button>
                           </Container>
                         </Accordion.Body>
