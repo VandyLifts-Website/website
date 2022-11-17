@@ -202,5 +202,3 @@ else:
     LOGIN_REDIRECT_URL = 'http://vandylifts.com/'
     LOGOUT_REDIRECT_URL = 'http://vandylifts.com/'
 
-SESSION_COOKIE_HTTPONLY = False
-
