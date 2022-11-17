@@ -1,4 +1,4 @@
-/* Copyright P. Opiyo @2022 - All rights reserved */
+/* Copyright P. Opiyo and Joshua Payne @2022 - All rights reserved */
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";

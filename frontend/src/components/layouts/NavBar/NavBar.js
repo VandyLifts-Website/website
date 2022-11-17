@@ -1,4 +1,4 @@
-/* Copyright P. Opiyo @2022 - All rights reserved */
+/* Copyright P. Opiyo and Joshua Payne @2022 - All rights reserved */
 import React from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";

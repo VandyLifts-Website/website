@@ -1,4 +1,4 @@
-/* Copyright Josh Payne & Paul Opiyo @2022 - All rights reserved */
+/* Copyright Joshua Payne & Paul Opiyo @2022 - All rights reserved */
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
