@@ -1,9 +1,14 @@
 {% load socialaccount %}
 <html>
 <body>
-<h1>My Google OAuth Project </h1>
+<h1>Login Testing Screen </h1>
 {% if user.is_authenticated %}
-  <p>Welcome, You are logged in as {{ user.username }}</p>
+  <p>
+    Name: {{user.first_name}} {{user.last_name}}<br>
+    Username: {{ user.username }} <br>
+    Email: {{user.email}} <br>
+  </p>
+  <p></p>
 {% else %}
   <a href="{% provider_login_url 'google' %}">Login With Google</a>
 {% endif %}

@@ -1,29 +1,8 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+
 
 function SignIn() {
-  const navigate = useNavigate();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    navigate("/profile");
-  };
-
-  function handleCallBackResponse(res) {
-    console.log("Encoded JWT Token: " + res.credential);
-  };
-  useEffect(() => {
-    /*global google*/
-    google.accounts.id.initialize({
-      client_id: "381841134579-jcch1ags5re1siuu45lsjnr24st1fnj5.apps.googleusercontent.com",
-      callback: handleCallBackResponse
-    });
-    google.accounts.id.renderButton(
-      document.getElementById("signInDiv"),
-      {theme: "outline", size: "large"}
-    );
-  },[]);
 
   return (
     <div>
@@ -33,7 +12,6 @@ function SignIn() {
             <form
               className="card shadow-2-strong"
               style={{ borderRadius: "1rem" }}
-              onSubmit={handleSubmit}
             >
               <div className="card-body p-5 text-center">
                 <h3 className="mb-5">Sign In</h3>

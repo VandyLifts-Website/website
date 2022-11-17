@@ -1,12 +1,11 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React from "react";
-import { Link } from "react-router-dom";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
+
 
 function NavBar(props) {
   const getCookie = (name) => {
@@ -40,7 +39,9 @@ function NavBar(props) {
             method="post"
           >
             <input type="hidden" name="csrfmiddlewaretoken" value={csrftoken} />
-            <button type="submit">signin</button>
+            <Button variant="outline-dark" type="submit">
+              Sign In
+            </Button>
           </Form>
         ) : (
           <>
@@ -58,7 +59,9 @@ function NavBar(props) {
                 name="csrfmiddlewaretoken"
                 value={csrftoken}
               />
-              <button type="submit">Sign Out</button>
+              <Button variant="outline-dark" type="submit">
+                Sign Out
+              </Button>
             </Form>
           </>
         )}

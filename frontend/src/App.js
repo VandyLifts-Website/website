@@ -32,7 +32,6 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Landing />} />
         <Route exact path="/profile" element={<Profile />} />
-        <Route exact path="/signin" element={<SignIn />} />
         <Route exact path="/about" element={<About />} />
         <Route exact path="/organizations/:orgId" element={<Survey />} />
         <Route exact path="/organizations" element={<SurveySelect />} />
