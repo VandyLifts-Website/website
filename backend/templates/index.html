@@ -1,0 +1,17 @@
+{% comment %} Copyright Joshua Payne 2022 {% endcomment %}
+{% load socialaccount %}
+<html>
+<body>
+<h1>Login Testing Screen </h1>
+{% if user.is_authenticated %}
+  <p>
+    Name: {{user.first_name}} {{user.last_name}}<br>
+    Username: {{ user.username }} <br>
+    Email: {{user.email}} <br>
+  </p>
+  <p></p>
+{% else %}
+  <a href="{% provider_login_url 'google' %}">Login With Google</a>
+{% endif %}
+</body>
+</html>

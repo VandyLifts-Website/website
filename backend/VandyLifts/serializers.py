@@ -1,5 +1,5 @@
 from numpy import source
-from rest_framework import serializers
+from rest_framework import serializers, permissions
 from .models import Organization, SurveySubmission, Match, TimeAvailability
 from django.contrib.auth.models import User
 
@@ -54,10 +54,32 @@ class OrganizationReadSerializer(serializers.ModelSerializer):
         fields = ('__all__')
 
 
+class SurveySubmissionValidator:
+    def __call__(self, data):
+        if data['organization'].type_of_organization == Organization.OrganizationType.MENTOR_MENTEE:
+            if data['type_of_person'] not in [SurveySubmission.PersonType.MENTOR, SurveySubmission.PersonType.MENTEE]:
+                raise serializers.ValidationError(
+                    {'type_of_person': 'The type of Survey Submission should match the organization'})
+        if data['organization'].type_of_organization == Organization.OrganizationType.BUDDY:
+            if data['type_of_person'] not in [SurveySubmission.PersonType.BUDDY]:
+                raise serializers.ValidationError(
+                    {'type_of_person': 'The type of Survey Submission should match the organization'})
+        if data['organization'].type_of_organization == Organization.OrganizationType.DAY_IN_THE_LIFE:
+            if data['type_of_person'] not in [SurveySubmission.PersonType.GUIDE_LIFTER, SurveySubmission.PersonType.LEARNER_LIFER]:
+                raise serializers.ValidationError(
+                    {'type_of_person': 'The type of Survey Submission should match the organization'})
+        
+        if data['type_of_person'] != SurveySubmission.PersonType.MENTOR:
+            if data['max_matches'] != 1:
+                raise serializers.ValidationError(
+                    {'max_matches': 'Only Mentors can have more than 1 match'})
+
+
 class SurveySubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SurveySubmission
         fields = ('__all__')
+        validators = [SurveySubmissionValidator()]
 
 
 class SurveySubmissionReadSerializer(serializers.ModelSerializer):
