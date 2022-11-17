@@ -23,10 +23,15 @@ try:
 except KeyError as e:
     raise RuntimeError("Could not find a SECRET_KEY in the enviroment") from e
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]', '.vandylifts.com']
 # ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
+
+STATIC_URL = "/dj_static/"
+STATIC_ROOT = "/var/www/vandylifts.com/static"
+STATICFILES_DIRS = [ BASE_DIR /  "../frontend/build"]
+
 
 # Application definition
 
@@ -116,8 +121,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
