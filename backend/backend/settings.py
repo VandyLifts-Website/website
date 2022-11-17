@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'django_filters',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,5 @@ CSRF_TRUSTED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
+
+PHONENUMBER_DEFAULT_REGION = 'US'

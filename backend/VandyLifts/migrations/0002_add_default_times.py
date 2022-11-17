@@ -20,7 +20,7 @@ def add_times(apps, schema_editor):
     }
 
     # The Rec opens at 6am at the earliest and closes at 11pm at the latest
-    OPENING_HOUR = 6
+    OPENING_HOUR = 7
     CLOSING_HOUR = 12 + 11 # This value is an exclusive bound of the range
     MINUTE_INTERVAL = 60
 

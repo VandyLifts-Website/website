@@ -5,6 +5,7 @@ import pstats
 from pstats import SortKey
 from django.db import IntegrityError, transaction
 from django.test import TestCase, override_settings
+from faker import Faker
 
 # Author: David Perez
 # Start Date: 10/17/2022
@@ -14,9 +15,12 @@ from django.test import TestCase
 from VandyLifts.automatic_matcher_ortools import solve_automatic_matches
 from VandyLifts.models import TimeAvailability, User, Organization, SurveySubmission
 
+fake = Faker('en_US')
+Faker.seed(4321)
 
 def handle_user(name, email, password, org, times, person_type, preferences, num_matches, gender_preference, gender, monday, tuesday, wednesday, thursday, friday, saturday, sunday):
     # Create user if the user does not already exist
+    name = fake.unique.name()
     try:
         with transaction.atomic():
             user = User.objects.create_user(name.replace(
