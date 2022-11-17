@@ -4,7 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Admin from "./components/pages/Admin/Admin";
 import Profile from "./components/pages/Profile/Profile";
-import SignIn from "./components/pages/SignIn/SignIn";
 import Landing from "./components/pages/Landing/Landing";
 import Survey from "./components/pages/Survey/Survey";
 import About from "./components/pages/About/About";

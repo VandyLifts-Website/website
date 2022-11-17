@@ -1,3 +1,5 @@
+//Copyright Joshua Payne and David Perez 2022
+
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
 module.exports = function (app) {
@@ -11,15 +13,14 @@ module.exports = function (app) {
       on: {
         proxyReq: (proxyReq, req, res) => {
           /* handle proxyReq */
-          console.log("BEESECHURGER")
+         
         },
         proxyRes: (proxyRes, req, res) => {
           /* handle proxyRes */
-          console.log("BEESECHURGER")
+          
         },
         error: (err, req, res) => {
           /* handle error */
-          console.log("BEESECHURGER")
         },
     }    
     })
