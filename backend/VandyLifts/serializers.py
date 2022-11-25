@@ -25,7 +25,7 @@ class TimeAvailabilityCreateSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username')
+        fields = ('id', 'username', 'email')
 
 
 class OrganizationSerializer(serializers.ModelSerializer):
@@ -45,9 +45,11 @@ class OrganizationReadSerializer(serializers.ModelSerializer):
     owner = UserSerializer(read_only=True)
     time_availability = TimeAvailabilityReadSerializer(
         many=True, read_only=True)
-    type_of_organization = serializers.CharField(source='get_type_of_organization_display', read_only=True)
+    type_of_organization = serializers.CharField(
+        source='get_type_of_organization_display', read_only=True)
     gender = serializers.CharField(source='get_gender_display', read_only=True)
-    gender_preference = serializers.CharField(source='get_gender_preference_display', read_only=True)
+    gender_preference = serializers.CharField(
+        source='get_gender_preference_display', read_only=True)
 
     class Meta:
         model = Organization
@@ -68,7 +70,7 @@ class SurveySubmissionValidator:
             if data['type_of_person'] not in [SurveySubmission.PersonType.GUIDE_LIFTER, SurveySubmission.PersonType.LEARNER_LIFER]:
                 raise serializers.ValidationError(
                     {'type_of_person': 'The type of Survey Submission should match the organization'})
-        
+
         if data['type_of_person'] != SurveySubmission.PersonType.MENTOR:
             if data['max_matches'] != 1:
                 raise serializers.ValidationError(
@@ -87,7 +89,11 @@ class SurveySubmissionReadSerializer(serializers.ModelSerializer):
     organization = OrganizationMinimalSerializer(read_only=True)
     time_availability = TimeAvailabilityReadSerializer(
         many=True, read_only=True)
-    type_of_person = serializers.CharField(source='get_type_of_person_display', read_only=True)
+    type_of_person = serializers.CharField(
+        source='get_type_of_person_display', read_only=True)
+    gender = serializers.CharField(source='get_gender_display', read_only=True)
+    gender_preference = serializers.CharField(
+        source='get_gender_preference_display', read_only=True)
 
     class Meta:
         model = SurveySubmission

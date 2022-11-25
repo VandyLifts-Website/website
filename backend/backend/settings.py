@@ -57,7 +57,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -136,19 +136,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    #'http://localhost:8000',
+    'http://127.0.0.1:3000',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000/',
+    'http://localhost:8000',
     'http://localhost:3000',
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:3000',
 ]
-
-
-
-# ALLOWED_HOSTS = [
-#     'localhost',
-# ]
 
 # LOGGING = {
 #     'version': 1,
@@ -198,6 +194,7 @@ SITE_ID = 2
 if DEBUG:
     LOGOUT_REDIRECT_URL = '/'
     LOGIN_REDIRECT_URL = 'http://localhost:3000/'
+    # LOGIN_REDIRECT_URL = 'http://127.0.0.1:3000/'
 else:
     LOGIN_REDIRECT_URL = 'http://vandylifts.com/'
     LOGOUT_REDIRECT_URL = 'http://vandylifts.com/'

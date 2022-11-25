@@ -1,5 +1,6 @@
 /* Copyright P. Opiyo @2022 - All rights reserved */
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Accordion from "react-bootstrap/Accordion";
 import Button from "react-bootstrap/Button";
@@ -7,24 +8,19 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
-import csrftoken from "../../../csrftoken.js";
 
-axios.defaults.xsrfCookieName = "csrftoken";
-axios.defaults.xsrfHeaderName = "X-CSRFToken";
-
-function Profile() {
+function Admin() {
+  const { orgId } = useParams();
   const [users, setUsers] = useState([]);
   const [matches, setMatches] = useState([]);
-  const [match, setMatch] = useState({
-    organization: 1,
-    confirmed: false,
-    people: [],
-    times_matched: [1],
-  });
+  const [leftPerson, setLeftPerson] = useState(null);
+  const [rightPerson, setRightPerson] = useState(null);
 
-  useEffect(() => {
+  const loadData = () => {
     const fetchData = async () => {
-      const surveyResponse = await axios.get("/api/survey_submissions/");
+      const surveyResponse = await axios.get(
+        `/api/survey_submissions/?organization=${orgId}`
+      );
 
       if (surveyResponse.status !== 200) {
         console.log("Error status:", surveyResponse.status);
@@ -34,18 +30,18 @@ function Profile() {
       const responseJson = surveyResponse.data;
       setUsers(responseJson);
 
-      const matchResponse = await axios.get("/api/matches");
+      const matchResponse = await axios.get(
+        `/api/matches/?organization=${orgId}`
+      );
       setMatches(matchResponse.data);
     };
 
     fetchData().catch((err) => {
       console.log(err.message);
     });
-  }, []);
+  };
 
-  if (users !== []) {
-    console.log("User Data", users);
-  }
+  useEffect(loadData, [orgId]);
 
   const renderUsers = (array) => {
     const values = array?.map((user) => {
@@ -85,29 +81,26 @@ function Profile() {
     return values;
   };
 
-  const selectUser = (event) => {
-    event.preventDefault();
-
-    setMatch({
-      ...match,
-      people: [...match.people, event.target.value],
-    });
-    console.log("Current match", match);
-  };
-
   const handleClick = async (event) => {
     event.preventDefault();
 
-    const response = await axios.post(`/api/matches/`, match, {
-      headers: {
-        // Overwrite Axios's automatically set Content-Type
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-      withCredentials: true,
+    const leftTimeIds = users
+      .find((person) => person.id.toString() === leftPerson)
+      .time_availability.map((time) => time.id);
+    const rightTimeIds = users
+      .find((person) => person.id.toString() === rightPerson)
+      .time_availability.map((time) => time.id);
+
+    const response = await axios.post(`/api/matches/`, {
+      organization: orgId,
+      confirmed: false,
+      people: [leftPerson, rightPerson],
+      times_matched: leftTimeIds.filter((leftTimeId) =>
+        rightTimeIds.includes(leftTimeId)
+      ),
     });
 
-    if (response.status !== 200) {
+    if (response.status !== 201) {
       console.log(`Error status: `, response.status);
       throw new Error(`Error! Status: ${response.status}`);
     }
@@ -116,17 +109,13 @@ function Profile() {
   const handleClick2 = async (event) => {
     event.preventDefault();
 
-    const response = await axios.post(`/api/organizations/1/calculate_automatic_matches/`, {}, {
-      headers: {
-        // Overwrite Axios's automatically set Content-Type
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-      withCredentials: true,
-    });
+    const response = await axios.post(
+      `/api/organizations/${orgId}/calculate_automatic_matches/`,
+      {}
+    );
 
     if (response.status !== 200) {
-      console.log(`Error status: `, response.status);
+      console.log("Error status: ", response.status);
       throw new Error(`Error! Status: ${response.status}`);
     }
   };
@@ -175,6 +164,12 @@ function Profile() {
                               {userData(users)}
                             </thead>
                           </Table>
+                          <Button
+                            variant="outline-success mt-4"
+                            onClick={(_) => loadData()}
+                          >
+                            Refresh Users
+                          </Button>
                         </Accordion.Body>
                       </Accordion.Item>
                       <Accordion.Item eventKey="1">
@@ -187,9 +182,11 @@ function Profile() {
                                   id="people"
                                   className="form-select"
                                   aria-label="Default select example"
-                                  onChange={selectUser}
+                                  onChange={(event) =>
+                                    setLeftPerson(event.target.value)
+                                  }
                                 >
-                                  <option selected>User A</option>
+                                  <option value={""}>User A</option>
                                   {renderUsers(users)}
                                 </select>
                               </Col>
@@ -198,9 +195,11 @@ function Profile() {
                                   id="people"
                                   className="form-select"
                                   aria-label="Default select example"
-                                  onChange={selectUser}
+                                  onChange={(event) =>
+                                    setRightPerson(event.target.value)
+                                  }
                                 >
-                                  <option selected>User B</option>
+                                  <option value={""}>User B</option>
                                   {renderUsers(users)}
                                 </select>
                               </Col>
@@ -235,7 +234,10 @@ function Profile() {
                               )}
                             </thead>
                           </Table>
-                          <Button variant="outline-success mt-4">
+                          <Button
+                            variant="outline-success mt-4"
+                            onClick={(_) => loadData()}
+                          >
                             Refresh Matches
                           </Button>
                         </Accordion.Body>
@@ -252,4 +254,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Admin;

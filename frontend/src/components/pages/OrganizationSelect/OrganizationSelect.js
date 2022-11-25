@@ -3,13 +3,12 @@ import React, { useEffect, useState } from "react";
 import Button from "react-bootstrap/esm/Button";
 import { Link } from "react-router-dom";
 
-function SurveySelect() {
+function OrganizationSelect({ pageLink }) {
   const [orgData, setOrgData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(`/api/organizations/`);
-      console.log("Response", response);
 
       if (response.status !== 200) {
         console.log("Error status:", response.status);
@@ -26,7 +25,7 @@ function SurveySelect() {
 
   const orgList = orgData?.map((org) => {
     return (
-      <Link key={org.id} to={`/organizations/${org.id}`}>
+      <Link key={org.id} to={`/${pageLink}/${org.id}`}>
         <Button variant="primary" size="lg" style={{ width: "400px" }}>
           {org.title}
         </Button>
@@ -52,4 +51,4 @@ function SurveySelect() {
     </div>
   );
 }
-export default SurveySelect;
+export default OrganizationSelect;

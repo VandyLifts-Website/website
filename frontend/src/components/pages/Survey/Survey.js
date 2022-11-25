@@ -6,7 +6,7 @@ import TimeGrid from "../../layouts/TimeGrid/TimeGrid";
 import Form from "react-bootstrap/Form";
 import Input from "react-phone-number-input/input";
 
-function Survey() {
+function Survey(props) {
   const { orgId } = useParams();
   const navigate = useNavigate();
   const [orgData, setOrgData] = useState({});
@@ -31,13 +31,22 @@ function Survey() {
     [false, false, false, false, false, false, false],
   ]);
 
+  const [phonenumber, setPhoneNumber] = useState("");
+  const [timeAvailability, setTimeAvailability] = useState([]);
+  const [typeOfPerson, setTypeOfPerson] = useState("");
+  const [maxMatches, setMaxMatches] = useState(0);
+  const [name, setName] = useState("");
+  const [powerLifting, setPowerLifting] = useState(false);
+  const [bodyBuilding, setBodyBuilding] = useState(false);
+  const [olympicLifting, setOlympicLifting] = useState(false);
+  const [gender, setGender] = useState("");
+  const [genderPreference, setGenderPreference] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       const orgResponse = await axios.get(`/api/organizations/${orgId}`);
-      console.log("Organization:", orgResponse);
 
       const timeResponse = await axios.get(`/api/time_availability/`);
-      console.log("Time Response: ", timeResponse);
 
       if (orgResponse.status !== 200) {
         console.log("Error status:", orgResponse.status);
@@ -58,95 +67,35 @@ function Survey() {
     });
   }, [orgId]);
 
-  const [surveyData, setSurveyData] = useState({
-    id: 0,
-    user: 1,
-    phone_number: "",
-    organization: 0,
-    time_availability: [],
-    type_of_person: "",
-    max_matches: 0,
-    name: "",
-    power_lifting: false,
-    body_building: false,
-    olympic_lifting: false,
-    gender: "",
-    gender_preference: "",
-  });
-
-  const getCookie = (name) => {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      const cookies = document.cookie.split(";");
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === name + "=") {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  };
-
   const handleSubmit = (event) => {
     event.preventDefault();
-    // surveyData.id = orgData.id;
-    surveyData.organization = orgData.id;
-    // surveyData.user = 1;
-    surveyData.max_matches = 1;
+    const surveyData = {
+      phone_number: phonenumber,
+      time_availability: timeAvailability,
+      type_of_person: typeOfPerson,
+      max_matches: typeOfPerson === "1" ? maxMatches : "1",
+      name: name,
+      power_lifting: powerLifting,
+      body_building: bodyBuilding,
+      olympic_lifting: olympicLifting,
+      gender: gender,
+      gender_preference: genderPreference,
+      organization: orgId,
+      user: props.userData.id,
+    };
+
     console.log("Survey Data", surveyData);
-    const csrftoken = getCookie("csrftoken");
+
     const postData = async () => {
-      const response = await axios.post(
-        "/api/survey_submissions/",
-        surveyData,
-        {
-          headers: {
-            // Overwrite Axios's automatically set Content-Type
-            "Content-Type": "application/json",
-            "X-CSRFToken": csrftoken,
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.post("/api/survey_submissions/", surveyData);
       console.log(response);
+      if (response.status === 201) {
+        navigate(`/profile`);
+      }
     };
     postData().catch((err) => {
       console.log(err);
     });
-
-    setTimeout(() => {
-      navigate(`/profile`);
-    }, 1000);
-  };
-
-  const handleInputChange = (event) => {
-    event.preventDefault();
-
-    switch (event.target.id) {
-      case "power_lifting":
-      case "olympic_lifting":
-      case "body_building":
-        setSurveyData({
-          ...surveyData,
-          [event.target.id]: event.target.checked,
-        });
-        break;
-      case "phone_number":
-        setSurveyData({
-          ...surveyData,
-          [event.target.id]: event.target.value,
-        });
-        break;
-      default:
-        console.log("Value: ", event.target.value);
-        setSurveyData({
-          ...surveyData,
-          [event.target.id]: event.target.value,
-        });
-    }
   };
 
   return (
@@ -154,7 +103,7 @@ function Survey() {
       <div className="container py-5 h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-12 col-lg-6 col-xl-5">
-            <form
+            <Form
               className="card shadow-2-strong"
               style={{ borderRadius: "1rem" }}
               onSubmit={handleSubmit}
@@ -168,19 +117,14 @@ function Survey() {
                     id="name"
                     placeholder="Name"
                     maxLength={50}
-                    onChange={handleInputChange}
+                    onChange={(event) => setName(event.target.value)}
                   />
                 </div>
                 <div className="form-outline mb-4">
                   <Input
                     id="phone_number"
                     placeholder="Enter phone number"
-                    onChange={(phone_num) =>
-                      setSurveyData({
-                        ...surveyData,
-                        phone_number: phone_num,
-                      })
-                    }
+                    onChange={setPhoneNumber}
                   />
                 </div>
                 <div className="form-outline mb-4">
@@ -188,55 +132,56 @@ function Survey() {
                     type="checkbox"
                     id="power_lifting"
                     label="Power Lifting"
-                    onChange={handleInputChange}
+                    onChange={(event) => setPowerLifting(event.target.value)}
                   />
                   <Form.Check
                     type="checkbox"
                     id="olympic_lifting"
                     label="Olympic Lifting"
-                    onChange={handleInputChange}
+                    onChange={(event) => setOlympicLifting(event.target.value)}
                   />
                   <Form.Check
                     type="checkbox"
                     id="body_building"
                     label="Body Building"
-                    onClick={(event) => console.log(event.target.checked)}
-                    onChange={handleInputChange}
+                    onChange={(event) => setBodyBuilding(event.target.value)}
                   />
                 </div>
                 <div className="form-outline mb-4">
-                  <select
+                  <Form.Select
                     id="gender"
                     className="form-select"
                     aria-label="Default select example"
-                    onChange={handleInputChange}
+                    onChange={(event) => setGender(event.target.value)}
                   >
-                    <option selected>Gender</option>
+                    <option value="">Gender</option>
                     <option value="M">Male</option>
                     <option value="F">Female</option>
                     <option value="N">Prefer not to say</option>
-                  </select>
+                  </Form.Select>
                 </div>
                 <div className="form-outline mb-4">
-                  <select
+                  <Form.Select
                     id="gender_preference"
                     className="form-select"
                     aria-label="Default select example"
-                    onChange={handleInputChange}
+                    onChange={(event) =>
+                      setGenderPreference(event.target.value)
+                    }
                   >
-                    <option selected>Gender Preference</option>
+                    <option value="">Gender Preference</option>
                     <option value="1">Same</option>
                     <option value="2">All</option>
-                  </select>
+                  </Form.Select>
                 </div>
                 <div className="form-outline mb-4">
-                  <select
+                  <Form.Select
                     id="type_of_person"
                     className="form-select"
                     aria-label="Default select example"
-                    onChange={handleInputChange}
+                    onChange={(event) => setTypeOfPerson(event.target.value)}
                   >
-                    <option selected>Type of Person</option>
+                    <option value="">Type of Person</option>
                     {orgData.type_of_organization === "Mentor/Mentee" && (
                       <>
                         <option value="1">Mentor</option>
@@ -254,26 +199,28 @@ function Survey() {
                         <option value="5">Learner Lifter</option>
                       </>
                     )}
-                  </select>
+                  </Form.Select>
                 </div>
-                {surveyData.type_of_person === "1" && (
+                {typeOfPerson === "1" && (
                   <div className="form-outline mb-4">
-                    <select
+                    <Form.Select
                       className="form-select"
                       aria-label="Default select example"
+                      onChange={(event) => setMaxMatches(event.target.value)}
                     >
-                      <option selected>Number of mentees preferred</option>
+                      <option value="">Max number of mentees</option>
                       <option value="1">1</option>
-                      <option value="2">2 or more</option>
-                    </select>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </Form.Select>
                   </div>
                 )}
                 <TimeGrid
                   state={stateGrid}
                   setState={setStateGrid}
                   times={times}
-                  data={surveyData}
-                  setData={setSurveyData}
+                  data={timeAvailability}
+                  setData={setTimeAvailability}
                 />
                 <button
                   className="btn btn-outline-primary btn-block"
@@ -283,7 +230,7 @@ function Survey() {
                   Submit
                 </button>
               </div>
-            </form>
+            </Form>
           </div>
         </div>
       </div>

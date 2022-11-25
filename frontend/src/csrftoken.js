@@ -20,14 +20,14 @@ function getCookie(name) {
   return cookieValue;
 }
 
-const csrftoken = getCookie("csrftoken");
+const getCsrftoken = () => getCookie("csrftoken");
 
-const CSRFTOKEN = () => {
+function CSRFTOKEN({ csrftoken }) {
   return (
     csrftoken && (
       <input name="csrfmiddlewaretoken" value={csrftoken} type="hidden" />
     )
   );
-};
+}
 
-export default CSRFTOKEN;
+export { getCsrftoken, CSRFTOKEN };
