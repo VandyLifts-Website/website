@@ -83,6 +83,7 @@ class SurveySubmission(models.Model):
         choices=PersonType.choices,
     )
 
+    general_lifting = models.BooleanField(default=False)
     power_lifting = models.BooleanField(default=False)
     body_building = models.BooleanField(default=False)
     olympic_lifting = models.BooleanField(default=False)
@@ -105,6 +106,25 @@ class SurveySubmission(models.Model):
         max_length=1,
         choices=GenderPreference.choices,
     )
+
+    ### Not required for automatic matching
+
+    # Mentee
+    changing_mentors = models.BooleanField(default=False)
+
+    # Mentor
+    hours_per_week = models.PositiveIntegerField(null=True, blank=True)
+
+    # Buddy
+    why_interested_in_buddy = models.TextField(blank=True)
+    want_partner_of_same_experience = models.BooleanField(default=False)
+
+    # All
+    prior_experience = models.TextField(blank=True)
+    interests = models.TextField(blank=True)
+    else_involved = models.TextField(blank=True)
+    anything_else = models.TextField(blank=True)
+    questions = models.TextField(blank=True)
 
     class Meta:
         unique_together = ('user', 'organization', 'type_of_person')

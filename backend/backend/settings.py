@@ -193,8 +193,8 @@ SITE_ID = 2
 
 if DEBUG:
     LOGOUT_REDIRECT_URL = '/'
-    LOGIN_REDIRECT_URL = 'http://localhost:3000/'
-    # LOGIN_REDIRECT_URL = 'http://127.0.0.1:3000/'
+    # LOGIN_REDIRECT_URL = 'http://localhost:3000/'
+    LOGIN_REDIRECT_URL = 'http://127.0.0.1:3000/'
 else:
     LOGIN_REDIRECT_URL = 'http://vandylifts.com/'
     LOGOUT_REDIRECT_URL = 'http://vandylifts.com/'
