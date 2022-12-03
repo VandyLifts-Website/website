@@ -86,7 +86,6 @@ function TimeGrid({ state, setState, times, data, setData }) {
   return (
     <>
       <Form.Group className="mb-4">
-        <Form.Label>Availability</Form.Label>
         <Table striped bordered hover>
           <thead>
             <tr>

@@ -6,6 +6,7 @@ import TimeGrid from "../../layouts/TimeGrid/TimeGrid";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Input from "react-phone-number-input/input";
+import Accordion from "react-bootstrap/Accordion";
 
 function Survey(props) {
   const { orgId } = useParams();
@@ -343,14 +344,20 @@ function Survey(props) {
                     onChange={(event) => setQuestions(event.target.value)}
                   />
                 </FloatingLabel>
-
-                <TimeGrid
-                  state={stateGrid}
-                  setState={setStateGrid}
-                  times={times}
-                  data={timeAvailability}
-                  setData={setTimeAvailability}
-                />
+                <Accordion defaultActiveKey="0" className="mb-4">
+                  <Accordion.Item eventKey="0">
+                    <Accordion.Header>Time Availabilities</Accordion.Header>
+                    <Accordion.Body>
+                      <TimeGrid
+                        state={stateGrid}
+                        setState={setStateGrid}
+                        times={times}
+                        data={timeAvailability}
+                        setData={setTimeAvailability}
+                      />
+                    </Accordion.Body>
+                  </Accordion.Item>
+                </Accordion>
                 <button
                   className="btn btn-outline-primary btn-block"
                   id="submitBtn"
