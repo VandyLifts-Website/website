@@ -16,6 +16,7 @@ function Admin() {
   const [matches, setMatches] = useState([]);
   const [leftPerson, setLeftPerson] = useState(null);
   const [rightPerson, setRightPerson] = useState(null);
+  const [error, setError] = useState("");
 
   const loadData = () => {
     const fetchData = async () => {
@@ -24,7 +25,6 @@ function Admin() {
       );
 
       if (surveyResponse.status !== 200) {
-        console.log("Error status:", surveyResponse.status);
         throw new Error(`Error! status: ${surveyResponse.status}`);
       }
 
@@ -38,7 +38,7 @@ function Admin() {
     };
 
     fetchData().catch((err) => {
-      console.log(err.message);
+      setError(err.message);
     });
   };
 
@@ -250,6 +250,9 @@ function Admin() {
                         </Accordion.Body>
                       </Accordion.Item>
                     </Accordion>
+                    {error && (
+                      <div className="alert alert-danger mt-2">{error}</div>
+                    )}
                   </div>
                 </div>
               </div>

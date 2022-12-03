@@ -12,25 +12,10 @@ function Survey(props) {
   const navigate = useNavigate();
   const [orgData, setOrgData] = useState({});
   const [times, setTimes] = useState([]);
-  const [stateGrid, setStateGrid] = useState([
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-    [false, false, false, false, false, false, false],
-  ]);
+  const [stateGrid, setStateGrid] = useState(
+    [...Array(17)].map((_) => Array(7).fill(false))
+  );
+  const [error, setError] = useState("");
 
   const [phonenumber, setPhoneNumber] = useState("");
   const [timeAvailability, setTimeAvailability] = useState([]);
@@ -61,12 +46,10 @@ function Survey(props) {
       const timeResponse = await axios.get(`/api/time_availability/`);
 
       if (orgResponse.status !== 200) {
-        console.log("Error status:", orgResponse.status);
         throw new Error(`Error! status: ${orgResponse.status}`);
       }
 
       if (timeResponse.status !== 200) {
-        console.log("Error status:", timeResponse.status);
         throw new Error(`Error! status: ${timeResponse.status}`);
       }
 
@@ -75,7 +58,7 @@ function Survey(props) {
     };
 
     fetchData().catch((err) => {
-      console.log(err.message);
+      setError(err.message);
     });
   }, [orgId]);
 
@@ -116,7 +99,7 @@ function Survey(props) {
       }
     };
     postData().catch((err) => {
-      console.log(err);
+      setError(err.message);
     });
   };
 
@@ -243,7 +226,9 @@ function Survey(props) {
                         placeholder="Maximum number of mentees you are interested in having"
                         onChange={(event) => setMaxMatches(event.target.value)}
                       >
-                        <option value="">Select maximum number of mentees</option>
+                        <option value="">
+                          Select maximum number of mentees
+                        </option>
                         <option value="1">1</option>
                         <option value="2">2</option>
                         <option value="3">3</option>
@@ -373,6 +358,9 @@ function Survey(props) {
                 >
                   Submit
                 </button>
+                {error && (
+                  <div className="alert alert-danger mt-2">{error}</div>
+                )}
               </div>
             </Form>
           </div>
