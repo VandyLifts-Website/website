@@ -8,6 +8,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
+import { FaTrash } from "react-icons/fa/index.js";
 
 function Admin() {
   const { orgId } = useParams();
@@ -75,6 +76,11 @@ function Admin() {
           <td>{match?.people[0]?.name}</td>
           <td>{match?.people[1]?.name}</td>
           <td>{match?.people[0]?.organization.title}</td>
+          <td>
+            <button className="btn btn-danger">
+              <FaTrash />
+            </button>
+          </td>
         </tr>
       );
     });
@@ -205,7 +211,7 @@ function Admin() {
                               </Col>
                             </Row>
                             <Button
-                              variant="outline-primary mt-4"
+                              variant="outline-primary mt-4 me-2"
                               onClick={handleClick}
                             >
                               Create a Match
@@ -228,6 +234,7 @@ function Admin() {
                                 <th>User A</th>
                                 <th>User B</th>
                                 <th>Organization</th>
+                                <th>Delete</th>
                               </tr>
                               {currentMatches(
                                 matches.filter((match) => match.people.length)
