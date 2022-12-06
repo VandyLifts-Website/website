@@ -13,7 +13,8 @@ import { FaTrash } from "react-icons/fa/index.js";
 function Admin() {
   const { orgId } = useParams();
   const [users, setUsers] = useState([]);
-  const [matches, setMatches] = useState([]);
+  const [confirmedMatches, setConfirmedMatches] = useState([]);
+  const [unconfirmedMatches, setUncomfirmedMatches] = useState([]);
   const [leftPerson, setLeftPerson] = useState(null);
   const [rightPerson, setRightPerson] = useState(null);
   const [error, setError] = useState("");
@@ -23,18 +24,32 @@ function Admin() {
       const surveyResponse = await axios.get(
         `/api/survey_submissions/?organization=${orgId}`
       );
-
       if (surveyResponse.status !== 200) {
-        throw new Error(`Error! status: ${surveyResponse.status}`);
+        throw new Error(
+          `Error fetching survey submissions: ${surveyResponse.status}`
+        );
       }
+      setUsers(surveyResponse.data);
 
-      const responseJson = surveyResponse.data;
-      setUsers(responseJson);
-
-      const matchResponse = await axios.get(
-        `/api/matches/?organization=${orgId}`
+      const unconfirmedResponse = await axios.get(
+        `/api/matches/?organization=${orgId}&confirmed=false`
       );
-      setMatches(matchResponse.data);
+      if (unconfirmedResponse.status !== 200) {
+        throw new Error(
+          `Error fetching uncofirmed matches: ${unconfirmedResponse.status}`
+        );
+      }
+      setUncomfirmedMatches(unconfirmedResponse.data);
+
+      const confirmedResponse = await axios.get(
+        `/api/matches/?organization=${orgId}&confirmed=true`
+      );
+      if (unconfirmedResponse.status !== 200) {
+        throw new Error(
+          `Error fetching cofirmed matches: ${confirmedResponse.status}`
+        );
+      }
+      setConfirmedMatches(confirmedResponse.data);
     };
 
     fetchData().catch((err) => {
@@ -63,10 +78,38 @@ function Admin() {
           <td>{user.gender}</td>
           <td>{user.type_of_person}</td>
           <td>{user.organization.title}</td>
+          <td className="text-center">
+            <button
+              className="btn btn-danger"
+              onClick={(ev) => deleteSurvey(ev, user.id)}
+            >
+              <FaTrash />
+            </button>
+          </td>
         </tr>
       );
     });
     return values;
+  };
+
+  const deleteMatch = async (ev, matchId) => {
+    ev.preventDefault();
+
+    const response = await axios.delete(`/api/matches/${matchId}`);
+
+    if (!response.ok) {
+      setError(response.data);
+    }
+  };
+
+  const deleteSurvey = async (ev, surveyId) => {
+    ev.preventDefault();
+
+    const response = await axios.delete(`/api/survey_submissions/${surveyId}`);
+
+    if (!response.ok) {
+      setError(response.data);
+    }
   };
 
   const currentMatches = (array) => {
@@ -76,8 +119,11 @@ function Admin() {
           <td>{match?.people[0]?.name}</td>
           <td>{match?.people[1]?.name}</td>
           <td>{match?.people[0]?.organization.title}</td>
-          <td>
-            <button className="btn btn-danger">
+          <td className="text-center">
+            <button
+              className="btn btn-danger"
+              onClick={(ev) => deleteMatch(ev, match.id)}
+            >
               <FaTrash />
             </button>
           </td>
@@ -158,8 +204,7 @@ function Admin() {
                     <img src="/images/admin.png" alt="My admin" />
                   </div>
                   <div className="ms-3" style={{ marginTop: "130px" }}>
-                    <h5>Your Admin</h5>
-                    <p>admin@vanderbilt.edu</p>
+                    <h5>Administrator Portal</h5>
                   </div>
                 </div>
                 <div className="card-body p-4 text-black">
@@ -180,6 +225,7 @@ function Admin() {
                                 <th>Gender</th>
                                 <th>Type of Person</th>
                                 <th>Organization</th>
+                                <th className="text-center">Delete Survey</th>
                               </tr>
                               {userData(users)}
                             </thead>
@@ -242,16 +288,35 @@ function Admin() {
                       <Accordion.Item eventKey="2">
                         <Accordion.Header>View Matches</Accordion.Header>
                         <Accordion.Body>
+                          <label>Unconfirmed Matches</label>
                           <Table striped bordered hover>
                             <thead>
                               <tr>
                                 <th>User A</th>
                                 <th>User B</th>
                                 <th>Organization</th>
-                                <th>Delete</th>
+                                <th className="text-center">Edit Match</th>
                               </tr>
                               {currentMatches(
-                                matches.filter((match) => match.people.length)
+                                unconfirmedMatches.filter(
+                                  (match) => match.people.length
+                                )
+                              )}
+                            </thead>
+                          </Table>
+                          <label>Confirmed Matches</label>
+                          <Table striped bordered hover>
+                            <thead>
+                              <tr>
+                                <th>User A</th>
+                                <th>User B</th>
+                                <th>Organization</th>
+                                <th className="text-center">Edit Match</th>
+                              </tr>
+                              {currentMatches(
+                                confirmedMatches.filter(
+                                  (match) => match.people.length
+                                )
                               )}
                             </thead>
                           </Table>

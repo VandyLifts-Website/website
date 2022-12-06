@@ -19,11 +19,7 @@ function Footer(props) {
           <div className="row mt-3">
             <div md="3" lg="4" xl="3" className="col mx-auto mb-4 me-5">
               <h6 className="text-uppercase fw-bold mb-4">VandyLifts</h6>
-              <p>
-                Here you can use rows and columns to organize your footer
-                content. Lorem ipsum dolor sit amet, consectetur adipisicing
-                elit.
-              </p>
+              <p>Join Us Today!</p>
             </div>
 
             <div md="3" lg="2" xl="2" className="col mx-auto mb-4">
