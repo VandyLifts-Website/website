@@ -63,10 +63,38 @@ function Admin() {
           <td>{user.gender}</td>
           <td>{user.type_of_person}</td>
           <td>{user.organization.title}</td>
+          <td className="text-center">
+            <button
+              className="btn btn-danger"
+              onClick={(ev) => deleteSurvey(ev, user.id)}
+            >
+              <FaTrash />
+            </button>
+          </td>
         </tr>
       );
     });
     return values;
+  };
+
+  const deleteMatch = async (ev, matchId) => {
+    ev.preventDefault();
+
+    const response = await axios.delete(`/api/matches/${matchId}`);
+
+    if (!response.ok) {
+      setError(response.data);
+    }
+  };
+
+  const deleteSurvey = async (ev, surveyId) => {
+    ev.preventDefault();
+
+    const response = await axios.delete(`/api/survey_submissions/${surveyId}`);
+
+    if (!response.ok) {
+      setError(response.data);
+    }
   };
 
   const currentMatches = (array) => {
@@ -76,8 +104,11 @@ function Admin() {
           <td>{match?.people[0]?.name}</td>
           <td>{match?.people[1]?.name}</td>
           <td>{match?.people[0]?.organization.title}</td>
-          <td>
-            <button className="btn btn-danger">
+          <td className="text-center">
+            <button
+              className="btn btn-danger"
+              onClick={(ev) => deleteMatch(ev, match.id)}
+            >
               <FaTrash />
             </button>
           </td>
@@ -166,6 +197,7 @@ function Admin() {
                                 <th>Gender</th>
                                 <th>Type of Person</th>
                                 <th>Organization</th>
+                                <th className="text-center">Delete Survey</th>
                               </tr>
                               {userData(users)}
                             </thead>
@@ -234,7 +266,7 @@ function Admin() {
                                 <th>User A</th>
                                 <th>User B</th>
                                 <th>Organization</th>
-                                <th>Edit Match</th>
+                                <th className="text-center">Edit Match</th>
                               </tr>
                               {currentMatches(
                                 matches.filter((match) => match.people.length)
