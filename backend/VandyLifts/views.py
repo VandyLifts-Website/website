@@ -198,7 +198,7 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
             "is_logged_in": request.user.is_authenticated,
             "is_admin": request.user.is_staff and request.user.is_superuser,
             "id": request.user.id,
-            "email": request.user.email,
-            "first_name": request.user.first_name,
-            "last_name": request.user.last_name,
+            "email": getattr(request.user, 'email', None),
+            "first_name": getattr(request.user, 'first_name', None),
+            "last_name": getattr(request.user, 'last_name', None),
         })
