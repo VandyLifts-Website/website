@@ -12,6 +12,7 @@ from .serializers import OrganizationSerializer, OrganizationReadSerializer, Sur
     TimeAvailabilityCreateSerializer, TimeAvailabilityReadSerializer, UserSerializer
 from .models import Organization, SurveySubmission, Match, TimeAvailability
 from .automatic_matcher_ortools import solve_automatic_matches
+from django.core import mail
 
 # Author: David Perez
 # Start Date: 9/27/2022
@@ -63,12 +64,38 @@ class OrganizationView(viewsets.ModelViewSet):
             return Response("Automatic Matching begun")
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+    def send_emails(self, request, pk=None):
+        connection = mail.get_connection()
+        if(not connection.open()):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+            
+        matches = Match.objects.filter(organization=pk, confirmed=False).all()
+        for match in matches:
+            times = "\n".join([str(time) for time in match.times_matched.all()])
+            matched_people = ", ".join([person.name for person in match.people.all()])
+            message = f"Hi, {matched_people} \n\nYou've been successfully matched! Your partner(s) are CC'd on this email. Below is your workout availability...\n{times}\n\n Regards,\nVandyLifts"
+            email = mail.EmailMessage("VandyLifts Match Notification", 
+            message, 
+            'vandylifts@gmail.com',
+            [person.user.email for person in match.people.all()],
+            connection=connection)
+            email.send()
+            match.confirmed = True
+            match.save()
+        connection.close()
+        return Response("Email Sent")
+         
+        
 
 
 class IsAdminOrSurveySubmissionUser(BasePermission):
     message = 'You can only access your own Survey Submissions unless you are an Admin.'
 
     def has_object_permission(self, request, view, obj):
+        if request.user and request.user.is_staff:
+            return True
         return obj.user == request.user
 
     def has_permission(self, request, view):
@@ -106,6 +133,8 @@ class IsAdminOrMatchUser(BasePermission):
     message = 'You can only access your own Matches unless you are an Admin'
 
     def has_object_permission(self, request, view, obj):
+        if request.user and request.user.is_staff:
+            return True
         return obj.people.filter(user=request.user).exists()
 
     def has_permission(self, request, view):

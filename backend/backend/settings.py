@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'phonenumber_field',
+    'django.core.mail',
 ]
 
 MIDDLEWARE = [
@@ -188,6 +189,13 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'vandylifts'
+EMAIL_HOST_PASSWORD = os.environ["EMAIL_PASSWORD"]
 
 SITE_ID = 2
 
