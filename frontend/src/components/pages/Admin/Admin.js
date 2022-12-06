@@ -234,7 +234,7 @@ function Admin() {
                                 <th>User A</th>
                                 <th>User B</th>
                                 <th>Organization</th>
-                                <th>Delete</th>
+                                <th>Edit Match</th>
                               </tr>
                               {currentMatches(
                                 matches.filter((match) => match.people.length)
