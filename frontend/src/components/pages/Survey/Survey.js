@@ -17,6 +17,7 @@ function Survey(props) {
     [...Array(17)].map((_) => Array(7).fill(false))
   );
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
 
   const [phonenumber, setPhoneNumber] = useState("");
   const [timeAvailability, setTimeAvailability] = useState([]);
@@ -26,6 +27,7 @@ function Survey(props) {
   const [powerLifting, setPowerLifting] = useState(false);
   const [bodyBuilding, setBodyBuilding] = useState(false);
   const [olympicLifting, setOlympicLifting] = useState(false);
+  const [generalLifting, setGeneralLifting] = useState(false);
   const [gender, setGender] = useState("");
   const [genderPreference, setGenderPreference] = useState("");
   const [changingMentors, setChangingMentors] = useState(false);
@@ -71,6 +73,7 @@ function Survey(props) {
       type_of_person: typeOfPerson,
       name: name,
       power_lifting: powerLifting,
+      general_lifting: generalLifting,
       body_building: bodyBuilding,
       olympic_lifting: olympicLifting,
       gender: gender,
@@ -82,7 +85,7 @@ function Survey(props) {
       changingMentors: typeOfPerson === "2" ? changingMentors : false,
       why_interested_in_buddy: typeOfPerson === "3" ? whyInterestedInBuddy : "",
       want_partner_of_same_experience:
-        typeOfPerson === "3" ? wantPartnerOfSameExperience : "",
+        typeOfPerson === "3" ? wantPartnerOfSameExperience : false,
       prior_experience: priorExperience,
       interests: interests,
       else_involved: elseInvolved,
@@ -90,17 +93,20 @@ function Survey(props) {
       questions: questions,
     };
 
-    console.log("Survey Data", surveyData);
-
     const postData = async () => {
       const response = await axios.post("/api/survey_submissions/", surveyData);
-      console.log(response);
       if (response.status === 201) {
         navigate(`/profile`);
       }
     };
+
     postData().catch((err) => {
-      setError(err.message);
+      const errObject = err.response.data;
+      const errorArray = [];
+      for (const property in errObject) {
+        errorArray.push(`${property}: ${errObject[property]}`);
+      }
+      setErrors(errorArray);
     });
   };
 
@@ -147,6 +153,14 @@ function Survey(props) {
                     label="Olympic Lifting"
                     onChange={(event) =>
                       setOlympicLifting(event.target.checked)
+                    }
+                  />
+                  <Form.Check
+                    type="checkbox"
+                    id="general_lifting"
+                    label="General Lifting"
+                    onChange={(event) =>
+                      setGeneralLifting(event.target.checked)
                     }
                   />
                   <Form.Check
@@ -367,6 +381,13 @@ function Survey(props) {
                 </button>
                 {error && (
                   <div className="alert alert-danger mt-2">{error}</div>
+                )}
+                {errors.length !== 0 && (
+                  <div className="alert alert-danger mt-2">
+                    {errors.map((err, i) => {
+                      return <li key={i}>{err}</li>;
+                    })}
+                  </div>
                 )}
               </div>
             </Form>
