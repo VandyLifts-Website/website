@@ -126,6 +126,20 @@ function Admin() {
     }
   };
 
+  const handleClick3 = async (event) => {
+    event.preventDefault();
+
+    const response = await axios.post(
+      `/api/organizations/${orgId}/send_emails/`,
+      {}
+    );
+
+    if (response.status !== 200) {
+      console.log("Error status: ", response.status);
+      throw new Error(`Error! Status: ${response.status}`);
+    }
+  };
+
   return (
     <div>
       <section className="h-100 gradient-custom-2">
@@ -247,6 +261,12 @@ function Admin() {
                           >
                             Refresh Matches
                           </Button>
+                          <Button
+                              variant="outline-primary mt-4"
+                              onClick={handleClick3}
+                            >
+                              Confirm/Email All Matches
+                            </Button>
                         </Accordion.Body>
                       </Accordion.Item>
                     </Accordion>
