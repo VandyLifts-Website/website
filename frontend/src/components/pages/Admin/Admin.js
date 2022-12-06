@@ -13,7 +13,8 @@ import { FaTrash } from "react-icons/fa/index.js";
 function Admin() {
   const { orgId } = useParams();
   const [users, setUsers] = useState([]);
-  const [matches, setMatches] = useState([]);
+  const [confirmedMatches, setConfirmedMatches] = useState([]);
+  const [unconfirmedMatches, setUncomfirmedMatches] = useState([]);
   const [leftPerson, setLeftPerson] = useState(null);
   const [rightPerson, setRightPerson] = useState(null);
   const [error, setError] = useState("");
@@ -23,18 +24,32 @@ function Admin() {
       const surveyResponse = await axios.get(
         `/api/survey_submissions/?organization=${orgId}`
       );
-
       if (surveyResponse.status !== 200) {
-        throw new Error(`Error! status: ${surveyResponse.status}`);
+        throw new Error(
+          `Error fetching survey submissions: ${surveyResponse.status}`
+        );
       }
+      setUsers(surveyResponse.data);
 
-      const responseJson = surveyResponse.data;
-      setUsers(responseJson);
-
-      const matchResponse = await axios.get(
-        `/api/matches/?organization=${orgId}`
+      const unconfirmedResponse = await axios.get(
+        `/api/matches/?organization=${orgId}&confirmed=false`
       );
-      setMatches(matchResponse.data);
+      if (unconfirmedResponse.status !== 200) {
+        throw new Error(
+          `Error fetching uncofirmed matches: ${unconfirmedResponse.status}`
+        );
+      }
+      setUncomfirmedMatches(unconfirmedResponse.data);
+
+      const confirmedResponse = await axios.get(
+        `/api/matches/?organization=${orgId}&confirmed=true`
+      );
+      if (unconfirmedResponse.status !== 200) {
+        throw new Error(
+          `Error fetching cofirmed matches: ${confirmedResponse.status}`
+        );
+      }
+      setConfirmedMatches(confirmedResponse.data);
     };
 
     fetchData().catch((err) => {
@@ -175,8 +190,7 @@ function Admin() {
                     <img src="/images/admin.png" alt="My admin" />
                   </div>
                   <div className="ms-3" style={{ marginTop: "130px" }}>
-                    <h5>Your Admin</h5>
-                    <p>admin@vanderbilt.edu</p>
+                    <h5>Administrator Portal</h5>
                   </div>
                 </div>
                 <div className="card-body p-4 text-black">
@@ -260,6 +274,7 @@ function Admin() {
                       <Accordion.Item eventKey="2">
                         <Accordion.Header>View Matches</Accordion.Header>
                         <Accordion.Body>
+                          <label>Unconfirmed Matches</label>
                           <Table striped bordered hover>
                             <thead>
                               <tr>
@@ -269,7 +284,25 @@ function Admin() {
                                 <th className="text-center">Edit Match</th>
                               </tr>
                               {currentMatches(
-                                matches.filter((match) => match.people.length)
+                                unconfirmedMatches.filter(
+                                  (match) => match.people.length
+                                )
+                              )}
+                            </thead>
+                          </Table>
+                          <label>Confirmed Matches</label>
+                          <Table striped bordered hover>
+                            <thead>
+                              <tr>
+                                <th>User A</th>
+                                <th>User B</th>
+                                <th>Organization</th>
+                                <th className="text-center">Edit Match</th>
+                              </tr>
+                              {currentMatches(
+                                confirmedMatches.filter(
+                                  (match) => match.people.length
+                                )
                               )}
                             </thead>
                           </Table>
