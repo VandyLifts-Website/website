@@ -1,0 +1,88 @@
+server_tokens off;
+access_log /var/log/nginx/vandylifts.access.log;
+error_log /var/log/nginx/vandylifts.error.log info;
+
+# This configuration will be changed to redirect to HTTPS later
+
+server {
+    server_name app.vandylifts.com;
+    listen 80;
+    return 307 https://$host$request_uri;
+}
+
+server {
+    server_name app.vandylifts.com;
+
+    location /dj_static/ {
+        autoindex on;
+        alias /var/www/vandylifts.com/static/;
+    }
+    location /admin/ {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+    }
+    location /accounts/ {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+    }
+    location /api-auth/ {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+    }
+    location /api/ {
+        proxy_pass http://localhost:8000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_redirect off;
+    }
+    #location /dj_static/ {
+    # autoindex on;
+    # alias /var/www/vandylifts.com/static/;
+    location /organizations/ {
+        try_files $uri $uri/ /;
+    }
+    location /profile {
+        autoindex on;
+        alias /var/www/vandylifts.com/static/;
+    }
+    location /about {
+        autoindex on;
+        alias /var/www/vandylifts.com/static/;
+    }
+    location /organizer/ {
+        try_files $uri $uri/ /;
+    }
+    location /organizer {
+        autoindex on;
+        alias /var/www/vandylifts.com/static/;
+    }
+    location /organizations {
+        autoindex on;
+        alias /var/www/vandylifts.com/static/;
+    }
+
+    location / {
+        autoindex on;
+        alias /var/www/vandylifts.com/static/;
+    }
+
+    #location ^~ ^/(admin|api|api-auth)/ {
+
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/app.vandylifts.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/app.vandylifts.com/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+}
