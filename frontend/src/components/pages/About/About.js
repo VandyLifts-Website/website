@@ -135,6 +135,39 @@ function About() {
                     <Card.Text>Cole Ellis</Card.Text>
                   </Card.Body>
                 </Card>
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src="/images/user.png"
+                    style={{ height: "280px" }}
+                  />
+                  <Card.Body>
+                    <Card.Title>HEAD COORDINATOR</Card.Title>
+                    <Card.Text>Sarah Buonnano</Card.Text>
+                  </Card.Body>
+                </Card>
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src="/images/user.png"
+                    style={{ height: "280px" }}
+                  />
+                  <Card.Body>
+                    <Card.Title>SOCIAL MEDIA CHAIR</Card.Title>
+                    <Card.Text>Alyssa Bersamin</Card.Text>
+                  </Card.Body>
+                </Card>
+                <Card>
+                  <Card.Img
+                    variant="top"
+                    src="/images/user.png"
+                    style={{ height: "280px" }}
+                  />
+                  <Card.Body>
+                    <Card.Title>SOCIAL EVENTS CHAIR</Card.Title>
+                    <Card.Text>Bita Tavafoghi</Card.Text>
+                  </Card.Body>
+                </Card>
               </CardGroup>
             </div>
           </div>
