@@ -218,7 +218,7 @@ def solve_automatic_matches(org_id):
         model.Add(cp_model.LinearExpr.Sum(
             all_mentor_matches) == num_mentor_matches)
         # TODO: Don't hardcode weight
-        fitness_components.append((num_mentor_matches, 10))
+        fitness_components.append((num_mentor_matches, organization.matched_mentors_weight))
 
     with catchtime("Creating the metric of the number of mentees with matches"):
         # Maximize number of mentees with matches
@@ -229,7 +229,7 @@ def solve_automatic_matches(org_id):
         model.Add(cp_model.LinearExpr.Sum(
             all_mentee_matches) == num_mentee_matches)
         # TODO: Don't hardcode weight
-        fitness_components.append((num_mentee_matches, 10))
+        fitness_components.append((num_mentee_matches, organization.matched_mentees_weight))
 
     with catchtime("Creating the metric of the number of matched preferences with matches"):
         # Maximize number of matches
@@ -239,7 +239,7 @@ def solve_automatic_matches(org_id):
         num_matches = model.NewIntVar(0, len(all_matches), "num_matches")
         model.Add(cp_model.LinearExpr.WeightedSum(*zip(*all_matches)) == num_matches)
         # TODO: Don't hardcode weight
-        fitness_components.append((num_matches, 2))
+        fitness_components.append((num_matches, organization.matched_preferences_weight))
 
     with catchtime("Creating the composite metric"):
         fitness = cp_model.LinearExpr.WeightedSum(

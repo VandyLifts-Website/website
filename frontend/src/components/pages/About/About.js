@@ -92,77 +92,49 @@ function About() {
               />
               <CardGroup style={{ marginBottom: "30px" }}>
                 <Card className="ml-3">
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>PRESIDENT</Card.Title>
                     <Card.Text>Melanie Leguizamon</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card className="ml-3">
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>VICE PRESIDENT</Card.Title>
                     <Card.Text>Henry Jonokuchi</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card className="ml-3">
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>TREASURER</Card.Title>
                     <Card.Text>Matthew Stein II</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card>
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>LEAD INSTRUCTOR</Card.Title>
                     <Card.Text>Cole Ellis</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card>
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>HEAD COORDINATOR</Card.Title>
                     <Card.Text>Sarah Buonnano</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card>
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>SOCIAL MEDIA CHAIR</Card.Title>
                     <Card.Text>Alyssa Bersamin</Card.Text>
                   </Card.Body>
                 </Card>
                 <Card>
-                  <Card.Img
-                    variant="top"
-                    src="/images/user.png"
-                    style={{ height: "280px" }}
-                  />
+                  <Card.Img variant="top" src="/images/user.png" />
                   <Card.Body>
                     <Card.Title>SOCIAL EVENTS CHAIR</Card.Title>
                     <Card.Text>Bita Tavafoghi</Card.Text>

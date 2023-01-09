@@ -41,8 +41,12 @@ class Organization(models.Model):
     members = models.ManyToManyField(User, through='SurveySubmission')
     time_choices = models.ManyToManyField(TimeAvailability)
     max_time_matches = models.PositiveIntegerField()
-    num_time_matches_weight = models.PositiveIntegerField()
-    num_matches_weight = models.PositiveIntegerField()
+    num_time_matches_weight = models.PositiveIntegerField(default=1)
+    num_matches_weight = models.PositiveIntegerField(default=10)
+    matched_mentors_weight = models.PositiveIntegerField(default=10)
+    matched_mentees_weight = models.PositiveIntegerField(default=10)
+    matched_preferences_weight = models.PositiveIntegerField(default=2)
+
 
     class OrganizationType(models.TextChoices):
         MENTOR_MENTEE = '1', _('Mentor/Mentee')
