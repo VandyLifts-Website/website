@@ -104,10 +104,10 @@ def solve_automatic_matches(org_id):
         raise ValueError("Unknown organization type")
 
     # Get mentor's in organization
-    mentors = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTOR).all()  # type: ignore
+    # mentors = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTOR).all()  # type: ignore
 
     # Get mentee's in organization
-    mentees = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTEE).all()  # type: ignore
+    # mentees = organization.surveysubmission_set.filter(type_of_person=SurveySubmission.PersonType.MENTEE).all()  # type: ignore
 
     # Get times of the organization
     times = organization.time_choices.all()
