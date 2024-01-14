@@ -183,14 +183,19 @@ source .DJANGO_SECRET_KEY
 # Run any database migrations
 python manage.py migrate
 
-# Build the frontend
+# Build the frontend (old - do not use)
 cd ~/website/frontend
 npm install
 npm run build
 cd ~/website/backend
 python manage.py collectstatic
 
+# Recreate gunicorn log files if missing
+sudo mkdir -pv /var/{log,run}/gunicorn/
+sudo chown -cR ubuntu:ubuntu /var/{log,run}/gunicorn/
+
 # Stop gunicorn and rerun it
+cd ~/website/backend
 killall gunicorn
 gunicorn -c config/gunicorn/prod.py
 
